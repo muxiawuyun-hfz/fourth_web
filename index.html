@@ -1,0 +1,2679 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>胡方峥的个人主页</title>
+  <style>
+    /* ===== 基础 ===== */
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: #0B132B;
+      /* 锚点跳转时目标不被导航栏盖住 */
+      scroll-padding-top: 84px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding-top: 64px;
+      /* 给固定导航栏留出高度 */
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      color: #d7e3f8;
+      /* 夜空渐变：深幽蓝 → 墨蓝 */
+      background: #0B132B linear-gradient(180deg, #0B132B 0%, #121A32 55%, #1C2541 100%) fixed;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===== 动态波纹背景 ===== */
+    #bg-waves {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 0;
+      opacity: .9;
+      pointer-events: none;
+    }
+
+    /* 星光粒子层：与波浪同层，靠 DOM 顺序压在其上，仍在 main（z-index:1）之下 */
+    #bg-stars {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 0;
+      /* 绝不遮挡页面点击 / 轮播拖拽 */
+      pointer-events: none !important;
+    }
+
+    /* 细颗粒质感，让蓝色不"塑料"，更有纸张/胶片感 */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: .05;
+      mix-blend-mode: soft-light;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='220' height='220' filter='url(%23n)'/></svg>");
+    }
+
+    /* ===== 固定导航栏（磨砂玻璃） ===== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      background: rgba(9, 15, 33, .72);
+      -webkit-backdrop-filter: blur(22px) saturate(150%);
+      backdrop-filter: blur(22px) saturate(150%);
+      border-bottom: 1px solid rgba(255, 255, 255, .12);
+      box-shadow: 0 10px 34px rgba(0, 0, 0, .45);
+    }
+
+    .nav a {
+      position: relative;
+      color: #c3d3ec;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, .5);
+      text-decoration: none;
+      padding: 4px 2px;
+      border-bottom: 2px solid transparent;
+      transition: color .3s, border-color .3s;
+    }
+
+    .nav a:hover {
+      color: #ffffff;
+      border-bottom-color: #e6d3a3;
+    }
+
+    /* ===== 内容卡片（半透明玻璃，波纹从背后透出） ===== */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 32px auto 56px;
+      padding: 40px 40px 36px;
+      background: rgba(255, 255, 255, .07);
+      -webkit-backdrop-filter: blur(38px) saturate(145%);
+      backdrop-filter: blur(38px) saturate(145%);
+      border: 1px solid rgba(255, 255, 255, .15);
+      border-radius: 20px;
+      box-shadow:
+        0 30px 80px rgba(0, 0, 0, .6),
+        0 0 60px rgba(110, 150, 255, .08),
+        inset 0 1px 0 rgba(255, 255, 255, .22),
+        inset 0 0 20px rgba(255, 255, 255, .05),
+        inset 0 0 44px rgba(150, 180, 255, .05);
+      animation: cardIn .9s cubic-bezier(.2, .7, .2, 1) both;
+    }
+
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* ===== 标题 ===== */
+    h1 {
+      margin: 0;
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 700;
+      letter-spacing: .08em;
+      line-height: 1.15;
+      /* 金色流光：暗金 → 亮金 → 月白高光 → 亮金 → 暗金 */
+      background: linear-gradient(100deg,
+        #b8860b 0%, #ffd700 16%, #fffbe6 30%, #ffd700 44%,
+        #b8860b 58%, #ffe98a 76%, #ffd700 100%);
+      background-size: 220% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 3px 12px rgba(0, 0, 0, .6)) drop-shadow(0 0 18px rgba(255, 215, 0, .22));
+      animation: sheen 6.5s linear infinite;
+    }
+
+    @keyframes sheen {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      100% {
+        background-position: 200% 50%;
+      }
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 22px;
+      color: #f3f7ff;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, .5);
+    }
+
+    h3 {
+      color: #f3f7ff;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, .5);
+    }
+
+    p,
+    li {
+      color: #E2E8F0;
+      font-weight: 500;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, .45);
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 19px;
+    }
+
+    /* 只有直接放在 main 下的 h2 才需要上间距 */
+    main>h2 {
+      margin-top: 34px;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    a {
+      color: #9fd0ff;
+      transition: color .3s;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, .45);
+    }
+
+    a:hover {
+      color: #ffffff;
+    }
+
+    /* ===== 个人简介（上方留出"画卷走廊"，供剑客行过） ===== */
+    .profile {
+      position: relative;
+      margin-top: 26px;
+      padding: 174px 30px 30px;
+      background:
+        radial-gradient(120% 100% at 100% 0%, rgba(150, 185, 255, .12) 0%, rgba(150, 185, 255, 0) 62%),
+        linear-gradient(135deg, rgba(255, 255, 255, .07), rgba(140, 175, 255, .04));
+      border: 1px solid rgba(255, 255, 255, .15);
+      border-radius: 16px;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .16),
+        inset 0 0 20px rgba(255, 255, 255, .05);
+      overflow: visible;
+    }
+
+    /* ===== 头像：「神」字幻化成水墨剑客，随圆形向右行 ===== */
+    .avatar {
+      /* 行走终点（圆形最右端），小屏时通过变量调整 */
+      --travel-end: calc(100% - 160px);
+
+      /* 夜空主题：黑墨反相成白墨；再加一层青蓝仙气 */
+      filter: invert(1) drop-shadow(0 0 15px rgba(0, 255, 255, .55));
+
+      position: absolute;
+      top: 18px;
+      left: 20px;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      animation: travel 18s cubic-bezier(.42, 0, .5, 1) 1 both;
+    }
+
+    /* 圆盘本体单独一层：抵达右端后自行溶掉，只剩墨迹 */
+    .avatar::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 30%, #fffefb 0%, #fbf8f1 46%, #eee7d9 100%);
+      border: 1px solid rgba(60, 55, 45, .24);
+      box-shadow:
+        0 14px 30px rgba(40, 60, 90, .15),
+        inset 0 0 26px rgba(120, 110, 90, .08);
+      animation: circleFade 18s linear 1 both;
+    }
+
+    @keyframes circleFade {
+      0%, 79% {
+        opacity: 1;
+      }
+
+      83% {
+        opacity: .62;
+      }
+
+      87%, 100% {
+        opacity: 0;
+      }
+    }
+
+    /* 圆形沿画卷向右移动，到最右端停留后淡出重来 */
+    @keyframes travel {
+      0% {
+        left: 20px;
+        opacity: 0;
+      }
+
+      5% {
+        left: 20px;
+        opacity: 1;
+      }
+
+      80% {
+        left: var(--travel-end);
+        opacity: 1;
+      }
+
+      97% {
+        left: var(--travel-end);
+        opacity: 1;
+      }
+
+      100% {
+        left: var(--travel-end);
+        opacity: 0;
+      }
+    }
+
+    /* 「神」字：先登场，再化墨而去 */
+    .glyph {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      font-family: "STKaiti", "KaiTi", "SimSun", serif;
+      font-size: 64px;
+      line-height: 1;
+      color: rgba(32, 36, 44, .9);
+      text-shadow: 0 0 1px rgba(32, 36, 44, .3);
+      pointer-events: none;
+      animation: glyphMorph 18s linear infinite;
+    }
+
+    @keyframes glyphMorph {
+      0%, 5% {
+        opacity: 1;
+        filter: blur(0);
+        transform: scale(1);
+      }
+
+      13% {
+        opacity: 0;
+        filter: blur(12px);
+        transform: scale(1.5);
+      }
+
+      100% {
+        opacity: 0;
+        filter: blur(12px);
+        transform: scale(1.5);
+      }
+    }
+
+    .avatar svg {
+      position: relative;
+      z-index: 1;
+      width: 140px;
+      height: 140px;
+      display: block;
+      overflow: visible;
+    }
+
+    /* ===== 水墨剑客的笔触 ===== */
+    .avatar .ink {
+      fill: none;
+      stroke: rgba(32, 36, 44, .92);
+      stroke-width: 3.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .avatar .torso {
+      stroke-width: 4;
+    }
+
+    .avatar .arm-guard {
+      stroke: rgba(32, 36, 44, .78);
+      stroke-width: 3.2;
+    }
+
+    .avatar .cape {
+      fill: rgba(52, 62, 78, .12);
+      stroke: rgba(52, 62, 78, .45);
+      stroke-width: 2.2;
+      stroke-linejoin: round;
+      transform-box: view-box;
+      transform-origin: 68px 60px;
+      animation: capeSway 1.2s ease-in-out infinite alternate;
+    }
+
+    @keyframes capeSway {
+      from {
+        transform: rotate(-2.5deg);
+      }
+
+      to {
+        transform: rotate(3.2deg);
+      }
+    }
+
+    .avatar .hat {
+      fill: rgba(32, 36, 44, .9);
+      stroke: none;
+    }
+
+    .avatar .hat-rim {
+      fill: none;
+      stroke: rgba(252, 249, 242, .5);
+      stroke-width: 1.4;
+      stroke-linecap: round;
+    }
+
+    /* 空心圆脑袋 + 关节点 + 脚下墨渍 */
+    .avatar .head-ring {
+      fill: none;
+      stroke: rgba(32, 36, 44, .9);
+      stroke-width: 3;
+    }
+
+    .avatar .joint {
+      fill: rgba(32, 36, 44, .85);
+      stroke: none;
+    }
+
+    .avatar .ground {
+      fill: rgba(70, 66, 58, .16);
+      stroke: none;
+      transform-box: view-box;
+      transform-origin: 76px 150px;
+      animation: groundBreath 2.4s ease-in-out infinite;
+    }
+
+    .avatar .ground-2 {
+      fill: rgba(70, 66, 58, .08);
+      stroke: none;
+    }
+
+    @keyframes groundBreath {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      40% {
+        transform: scale(1.07);
+        opacity: .8;
+      }
+
+      56% {
+        transform: scale(.97);
+        opacity: 1;
+      }
+    }
+
+    .avatar .sword-blade {
+      fill: none;
+      stroke: rgba(32, 36, 44, .95);
+      stroke-width: 2.4;
+      stroke-linecap: round;
+    }
+
+    .avatar .sword-hilt {
+      fill: none;
+      stroke: rgba(32, 36, 44, .85);
+      stroke-width: 2.4;
+      stroke-linecap: round;
+    }
+
+    .avatar .aura-1 {
+      fill: none;
+      stroke: rgba(32, 36, 44, .5);
+      stroke-width: 2.6;
+      stroke-linecap: round;
+    }
+
+    .avatar .aura-2 {
+      fill: none;
+      stroke: rgba(32, 36, 44, .28);
+      stroke-width: 1.4;
+      stroke-linecap: round;
+    }
+
+    /* 幻化：墨影聚成小人 */
+    .avatar .morph {
+      opacity: 0;
+      transform-box: view-box;
+      transform-origin: 74px 90px;
+      animation: figureMorph 18s linear infinite;
+    }
+
+    @keyframes figureMorph {
+      0%, 7% {
+        opacity: 0;
+        filter: blur(10px);
+        transform: scale(.85);
+      }
+
+      16% {
+        opacity: 1;
+        filter: blur(0);
+        transform: scale(1);
+      }
+
+      97% {
+        opacity: 1;
+        filter: blur(0);
+        transform: scale(1);
+      }
+
+      100% {
+        opacity: 0;
+        filter: blur(8px);
+        transform: scale(1.05);
+      }
+    }
+
+    /* 行进中的前倾：与圆形右移同周期，保持平衡感 */
+    .avatar .lean {
+      transform-box: view-box;
+      transform-origin: 72px 98px;
+      animation: lean 18s linear infinite;
+    }
+
+    @keyframes lean {
+      0%, 8% {
+        transform: rotate(0deg);
+      }
+
+      24% {
+        transform: rotate(2.4deg);
+      }
+
+      72% {
+        transform: rotate(2.4deg);
+      }
+
+      86%, 100% {
+        transform: rotate(0deg);
+      }
+    }
+
+    /* 出剑时的重心变化：劈出时微仰，收剑时回正 */
+    .avatar .figure {
+      transform-box: view-box;
+      transform-origin: 72px 98px;
+      animation: balance 2.4s ease-in-out infinite;
+    }
+
+    @keyframes balance {
+      0%, 100% {
+        transform: rotate(0deg);
+      }
+
+      40% {
+        transform: rotate(-2.2deg);
+      }
+
+      56% {
+        transform: rotate(1.4deg);
+      }
+
+      74% {
+        transform: rotate(0deg);
+      }
+    }
+
+    /* 持剑臂：举剑蓄力 → 劈出 → 收剑 */
+    .avatar .arm-sword {
+      animation: swing 2.4s cubic-bezier(.45, .05, .35, 1) infinite;
+    }
+
+    @keyframes swing {
+      0%, 6% {
+        transform: translate(76px, 64px) rotate(-52deg) translate(-76px, -64px);
+      }
+
+      40% {
+        transform: translate(76px, 64px) rotate(26deg) translate(-76px, -64px);
+      }
+
+      52% {
+        transform: translate(76px, 64px) rotate(20deg) translate(-76px, -64px);
+      }
+
+      74% {
+        transform: translate(76px, 64px) rotate(-24deg) translate(-76px, -64px);
+      }
+
+      100% {
+        transform: translate(76px, 64px) rotate(-52deg) translate(-76px, -64px);
+      }
+    }
+
+    /* 剑气：随劈出飞向右前方，渐淡消散 */
+    .avatar .aura {
+      opacity: 0;
+      animation: slash 2.4s linear infinite;
+    }
+
+    @keyframes slash {
+      0%, 34% {
+        opacity: 0;
+        transform: translate(0, 0) scale(.9);
+      }
+
+      42% {
+        opacity: .9;
+        transform: translate(4px, -2px) scale(1);
+      }
+
+      66% {
+        opacity: .35;
+        transform: translate(36px, 2px) scale(1.25);
+      }
+
+      84% {
+        opacity: 0;
+        transform: translate(60px, 6px) scale(1.45);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(60px, 6px) scale(1.45);
+      }
+    }
+
+    /* ===== 到达右端后化作一滩墨水滑落 ===== */
+    .avatar .melt {
+      transform-box: view-box;
+      transform-origin: 74px 150px;
+      animation: meltAway 18s linear infinite;
+    }
+
+    @keyframes meltAway {
+      0%, 80% {
+        opacity: 1;
+        filter: blur(0);
+        transform: scale(1, 1) translateY(0);
+      }
+
+      85% {
+        opacity: .92;
+        filter: blur(1.2px);
+        transform: scale(1.03, .78) translateY(6px);
+      }
+
+      89% {
+        opacity: .45;
+        filter: blur(4px);
+        transform: scale(.94, .32) translateY(21px);
+      }
+
+      93%, 100% {
+        opacity: 0;
+        filter: blur(8px);
+        transform: scale(.62, .07) translateY(30px);
+      }
+    }
+
+    /* 聚成的墨团：先在底部铺开，再摊平淡去 */
+    .avatar .puddle {
+      opacity: 0;
+      filter: blur(.35px);
+      transform-box: view-box;
+      transform-origin: 74px 146px;
+      animation: puddleForm 18s cubic-bezier(.2, .8, .4, 1) infinite;
+    }
+
+    .avatar .ink-puddle {
+      fill: rgba(22, 25, 32, .94);
+    }
+
+    .avatar .ink-puddle-2 {
+      fill: rgba(22, 25, 32, .3);
+    }
+
+    @keyframes puddleForm {
+      0%, 81% {
+        opacity: 0;
+        transform: scale(.12, .4) translateY(0);
+      }
+
+      86% {
+        opacity: .92;
+        transform: scale(1, 1) translateY(0);
+      }
+
+      90% {
+        opacity: .9;
+        transform: scale(1.1, .94) translateY(1px);
+      }
+
+      95% {
+        opacity: .6;
+        transform: scale(.96, .74) translateY(5px);
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(.78, .46) translateY(10px);
+      }
+    }
+
+    /* 墨滴物理层：只负责绘制，不吃鼠标事件 */
+    .ink-field {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* ===== 水墨猫狗：由墨团幻化，待机呼吸后一次连续的"两跳"行程 ===== */
+    /* 「你好，我是胡方峥」的父容器 —— 猫狗以它为定位基准 */
+    .intro {
+      position: relative;
+    }
+
+    .pets {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .pet {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      filter: blur(5px);
+      transition: opacity .55s ease, filter .55s ease;
+      will-change: left, top, opacity;
+    }
+
+    .pets.is-in .pet {
+      opacity: 1;
+      filter: blur(0);
+    }
+
+    .pets.is-in .pet-dog {
+      transition-delay: .12s;
+    }
+
+    .pet img {
+      display: block;
+      width: 100%;
+      height: auto;
+      transform-origin: 50% 100%;
+      /* 发光水墨剪影：反相保留灰阶细节，青色外发光，滤色融入夜空 */
+      filter: invert(1) drop-shadow(0 0 12px #00E5FF) brightness(1.2);
+      mix-blend-mode: screen;
+      /* 水平翻转：面向左边。翻转放在图片上，位移在父层，互不覆盖 */
+      transform: scaleX(-1);
+      animation: petBreathe 2s ease-in-out infinite;
+    }
+
+    /* 待机：2 秒一轮的呼吸起伏（关键帧里始终带着 scaleX(-1)，翻转不会中途丢失） */
+    @keyframes petBreathe {
+      0%, 100% {
+        transform: scaleX(-1) translateY(0) scale(1);
+      }
+
+      50% {
+        transform: scaleX(-1) translateY(-1.6px) scale(1.028);
+      }
+    }
+
+    /* 狗的原图本身已经朝左，再翻转会变成朝右，所以单独覆盖回来 */
+    .pet-dog img {
+      transform: scaleX(1);
+      animation-name: petBreatheDog;
+    }
+
+    @keyframes petBreatheDog {
+      0%, 100% {
+        transform: scaleX(1) translateY(0) scale(1);
+      }
+
+      50% {
+        transform: scaleX(1) translateY(-1.6px) scale(1.028);
+      }
+    }
+
+    .pet-cat {
+      width: 104px;
+    }
+
+    .pet-dog {
+      width: 132px;
+    }
+
+    /* 猫狗的位移完全由 JS 逐帧写入 left / top（像素值），这里不做任何关键帧动画 */
+    .pets.is-in .pet {
+      transition: opacity .55s ease, filter .55s ease;
+    }
+
+    /* ===== 爪印盖章：砸地 ===== */
+    .stamps {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .stamp {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      transform-origin: 50% 50%;
+      will-change: transform, opacity;
+    }
+
+    .stamp img {
+      display: block;
+      width: 100%;
+      height: auto;
+      /* 深色主题：反相成白墨（色相回正保留粉肉垫），用滤色叠在夜空中发亮 */
+      filter: invert(1) hue-rotate(180deg) drop-shadow(0 0 12px rgba(255, 215, 0, .8));
+      mix-blend-mode: screen;
+      opacity: .85;
+    }
+
+    .stamp-cat {
+      width: 104px;
+    }
+
+    .stamp-dog {
+      width: 100px;
+    }
+
+    /* 从天而降：scale(3) 全透明 → 猛地砸成 scale(1)，带过冲回弹 */
+    .stamps.is-hit .stamp-cat {
+      animation: pawSlam .62s cubic-bezier(.175, .885, .32, 1.275) both;
+    }
+
+    .stamps.is-hit .stamp-dog {
+      animation: pawSlam .62s cubic-bezier(.175, .885, .32, 1.275) .1s both;
+    }
+
+    @keyframes pawSlam {
+      0% {
+        opacity: 0;
+        transform: translateY(-72px) scale(3);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* 砸地瞬间整张卡片颤一下 */
+    .profile.is-hit {
+      animation: stampShake .44s cubic-bezier(.36, .07, .19, .97) both;
+    }
+
+    @keyframes stampShake {
+      0%, 100% {
+        transform: translate(0, 0);
+      }
+
+      12% {
+        transform: translate(-3px, 2px);
+      }
+
+      26% {
+        transform: translate(3px, -2px);
+      }
+
+      42% {
+        transform: translate(-2px, -1px);
+      }
+
+      58% {
+        transform: translate(2px, 1px);
+      }
+
+      76% {
+        transform: translate(-1px, 0);
+      }
+    }
+
+    /* 猫狗瞬间缩小消失 */
+    .pets.is-gone .pet {
+      opacity: 0;
+      transform: scale(.42);
+      transition: opacity .22s ease, transform .22s ease;
+    }
+
+    /* ===== GSAP 时间轴接管时的初始态（CDN 失败则旧 CSS 动画照常跑） ===== */
+    .profile.gs .avatar {
+      animation: none;
+      opacity: 0;
+    }
+
+    .profile.gs .avatar::before {
+      animation: none;
+    }
+
+    .profile.gs .glyph {
+      animation: none;
+    }
+
+    .profile.gs .morph {
+      animation: none;
+      opacity: 0;
+    }
+
+    .profile.gs .melt {
+      animation: none;
+    }
+
+    .profile.gs .puddle {
+      animation: none;
+      opacity: 0;
+    }
+
+    .profile.gs .pet {
+      transition: none;
+      /* 去掉父级滤镜，图片自身的 mix-blend-mode 才能真正与夜空相融 */
+      filter: none;
+    }
+
+    .profile.gs .stamp {
+      animation: none;
+    }
+
+    /* 爪印砸地：整页 0.2 秒震动 */
+    body.is-quake {
+      animation: bodyQuake .2s linear;
+    }
+
+    @keyframes bodyQuake {
+      0%, 100% {
+        transform: translate(0, 0);
+      }
+
+      20% {
+        transform: translate(-5px, 3px);
+      }
+
+      40% {
+        transform: translate(5px, -3px);
+      }
+
+      60% {
+        transform: translate(-3px, -2px);
+      }
+
+      80% {
+        transform: translate(3px, 2px);
+      }
+    }
+
+    /* ===== 爱好列表 ===== */
+    .hobbies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .hobby {
+      flex: 1 1 240px;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      background: rgba(255, 255, 255, .06);
+      border: 1px solid rgba(255, 255, 255, .15);
+      border-radius: 14px;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .14),
+        inset 0 0 20px rgba(255, 255, 255, .05);
+      transition: transform .4s cubic-bezier(.2, .7, .2, 1), box-shadow .4s, border-color .4s;
+    }
+
+    .hobby:hover {
+      transform: translateY(-5px);
+      border-color: rgba(230, 211, 163, .5);
+      box-shadow:
+        0 18px 38px rgba(0, 0, 0, .5),
+        0 0 30px rgba(230, 211, 163, .12);
+    }
+
+    .hobby a {
+      margin-top: auto;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* ===== 3D 画廊（Swiper Cover Flow） ===== */
+    .gallery-swiper {
+      --swiper-theme-color: #e6d3a3;
+      --swiper-navigation-color: #e7efff;
+      --swiper-navigation-size: 15px;
+
+      width: 100%;
+      padding: 10px 0 46px;
+      overflow: hidden;
+    }
+
+    .gallery-swiper .swiper-slide {
+      width: 300px;
+      height: 380px;
+      border-radius: 12px;
+      overflow: hidden;
+      opacity: .5;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, .55);
+      transition: opacity .45s ease, box-shadow .45s ease;
+    }
+
+    .gallery-swiper .swiper-slide-active {
+      opacity: 1;
+      box-shadow: 0 24px 54px rgba(0, 0, 0, .7), 0 0 34px rgba(230, 211, 163, .12);
+    }
+
+    .gallery-swiper .swiper-slide img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      cursor: zoom-in;
+    }
+
+    /* ===== 图片灯箱 ===== */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, .8);
+      opacity: 0;
+      visibility: hidden;
+      cursor: zoom-out;
+      transition: opacity .3s ease, visibility 0s linear .3s;
+    }
+
+    .lightbox.is-open {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity .3s ease, visibility 0s;
+    }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      cursor: zoom-out;
+      border-radius: 8px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, .55);
+      transform: scale(.96);
+      transition: transform .3s ease;
+    }
+
+    .lightbox.is-open img {
+      transform: scale(1);
+    }
+
+    .lightbox-hint {
+      position: absolute;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
+      color: rgba(255, 255, 255, .62);
+      font-size: 13px;
+      letter-spacing: .04em;
+      pointer-events: none;
+    }
+
+    .gallery-swiper .swiper-button-prev,
+    .gallery-swiper .swiper-button-next {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .1);
+      color: #e7efff;
+      border: 1px solid rgba(255, 255, 255, .22);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .45);
+    }
+
+    .gallery-swiper .swiper-button-prev::after,
+    .gallery-swiper .swiper-button-next::after {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .gallery-swiper .swiper-pagination {
+      bottom: 6px;
+    }
+
+    /* 幻灯片是重复拼接的板块不显示圆点 */
+    .gallery-swiper[data-no-dots="true"] .swiper-pagination {
+      display: none;
+    }
+
+    .gallery-swiper .swiper-pagination-bullet {
+      width: 7px;
+      height: 7px;
+      background: #cfe0ff;
+      opacity: .3;
+    }
+
+    .gallery-swiper .swiper-pagination-bullet-active {
+      opacity: .95;
+      background: #e6d3a3;
+    }
+
+    /* 兜底：CDN 没加载成功时，退化成可横向滑动的普通画廊 */
+    .gallery-swiper.no-swiper .swiper-wrapper {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .gallery-swiper.no-swiper .swiper-slide {
+      flex: 0 0 auto;
+      opacity: 1;
+    }
+
+    .gallery-swiper.no-swiper .swiper-pagination,
+    .gallery-swiper.no-swiper .swiper-button-prev,
+    .gallery-swiper.no-swiper .swiper-button-next {
+      display: none;
+    }
+
+    #project-1,
+    #project-2,
+    #project-3 {
+      font-size: 26px;
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    /* ===== 分隔区块 ===== */
+    .details,
+    .contact {
+      margin-top: 34px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, .12);
+    }
+
+    /* 联系区链接：浅金、无下划线、悬浮发光 */
+    .contact p {
+      line-height: 1.8;
+    }
+
+    .contact a {
+      display: inline-block;
+      color: #FFD700;
+      text-decoration: none;
+      transition: all .3s ease;
+    }
+
+    .contact a:hover {
+      color: #ffe98a;
+      text-shadow: 0 0 8px rgba(255, 215, 0, .8);
+      transform: scale(1.04);
+    }
+
+    footer {
+      margin-top: 28px;
+      text-align: center;
+      color: rgba(190, 205, 235, .66);
+      font-size: 15px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, .45);
+    }
+
+    /* ===== 小屏适配 ===== */
+    @media (max-width: 720px) {
+      .nav {
+        gap: 18px;
+        font-size: 15px;
+      }
+
+      main {
+        margin: 16px 12px 40px;
+        padding: 24px 20px;
+        border-radius: 16px;
+      }
+
+      .profile {
+        padding: 136px 18px 22px;
+      }
+
+      .avatar {
+        --travel-end: calc(100% - 132px);
+        width: 112px;
+        height: 112px;
+        top: 14px;
+      }
+
+      .avatar svg {
+        width: 112px;
+        height: 112px;
+      }
+
+      .glyph {
+        font-size: 52px;
+      }
+
+      .pet-cat {
+        width: 86px;
+      }
+
+      .pet-dog {
+        width: 108px;
+      }
+
+      .gallery-swiper .swiper-slide {
+        width: 208px;
+        height: 300px;
+      }
+    }
+
+    /* 尊重系统的"减少动态效果"设置 */
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      /* 静态呈现：直接显示小人，停在左侧 */
+      .glyph {
+        display: none;
+      }
+
+      .avatar {
+        left: 20px;
+      }
+
+      .avatar .morph {
+        opacity: 1 !important;
+        filter: none !important;
+      }
+    }
+  </style>
+
+  <!-- Swiper：3D 画廊 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+</head>
+
+<body>
+
+  <canvas id="bg-waves" aria-hidden="true"></canvas>
+  <canvas id="bg-stars" aria-hidden="true"></canvas>
+
+  <nav class="nav">
+    <a href="#home">首页</a>
+    <a href="#about">关于我</a>
+    <a href="#hobby">我的爱好</a>
+    <a href="#contact">联系我</a>
+  </nav>
+
+  <main>
+    <header id="home">
+      <h1>Welcome</h1>
+    </header>
+
+    <section class="profile" id="about">
+      <svg class="ink-field" aria-hidden="true"></svg>
+      <div class="avatar" role="img" aria-label="水墨剑客：由「神」字幻化，边走边舞剑向右行，到尽头化作一滩墨迹滑落">
+        <span class="glyph" aria-hidden="true">神</span>
+        <svg viewBox="30 16 116 148" aria-hidden="true">
+          <g class="morph">
+            <g class="melt">
+              <g class="lean">
+              <g class="figure">
+                <!-- 脚下墨渍 -->
+                <path class="ground" d="M 40 150 Q 58 143 78 148 Q 98 143 108 150 Q 96 156 74 154 Q 52 157 40 150 Z"></path>
+                <path class="ground-2" d="M 48 156 Q 72 160 98 154 Q 84 159 62 158 Q 52 158 48 156 Z"></path>
+
+                <!-- 披风：墨染，向身后飘起 -->
+                <path class="cape" d="M 70 62 Q 50 70 38 90 Q 28 108 36 128 Q 46 114 54 100 Q 64 84 72 76 Z"></path>
+
+                <!-- 后腿 -->
+                <polyline class="ink" points="72,98 58,120 52,144 44,148"></polyline>
+
+                <!-- 左臂（护身） -->
+                <polyline class="ink arm-guard" points="72,64 62,74 66,86"></polyline>
+
+                <!-- 躯干 -->
+                <line class="ink torso" x1="73" y1="62" x2="72" y2="98"></line>
+
+                <!-- 头：空心圆 + 宽檐斗笠 -->
+                <circle class="head-ring" cx="74" cy="50" r="10"></circle>
+                <circle class="joint" cx="76" cy="24" r="1.6"></circle>
+                <path class="hat" d="M 42 45 L 76 25 L 106 43 Q 74 52 42 45 Z"></path>
+                <path class="hat-rim" d="M 46 44 Q 74 50 102 43"></path>
+
+                <!-- 前腿 -->
+                <polyline class="ink" points="72,98 86,120 92,142 102,146"></polyline>
+
+                <!-- 膝关节墨点 -->
+                <circle class="joint" cx="58" cy="120" r="2.2"></circle>
+                <circle class="joint" cx="86" cy="120" r="2.2"></circle>
+                <circle class="joint" cx="62" cy="74" r="2"></circle>
+
+                <!-- 持剑臂与剑：垂剑向前 -->
+                <g class="arm-sword">
+                  <line class="ink" x1="76" y1="64" x2="88" y2="72"></line>
+                  <line class="ink" x1="88" y1="72" x2="97" y2="79"></line>
+                  <line class="sword-blade" x1="97" y1="79" x2="124" y2="95"></line>
+                  <line class="sword-hilt" x1="103" y1="75" x2="95" y2="85"></line>
+                  <line class="sword-hilt" x1="97" y1="79" x2="93" y2="76.5"></line>
+                  <circle class="joint" cx="88" cy="72" r="2"></circle>
+                </g>
+
+                <!-- 剑气 -->
+                <g class="aura">
+                  <path class="aura-1" d="M 104 36 Q 140 62 106 86"></path>
+                  <path class="aura-2" d="M 110 44 Q 134 62 112 79"></path>
+                </g>
+              </g>
+            </g>
+            </g>
+          </g>
+
+          <!-- 化作的墨团与顺边滑落的墨迹 -->
+          <g class="puddle" aria-hidden="true">
+            <ellipse class="ink-puddle" cx="47" cy="146.5" rx="5.2" ry="2.6" transform="rotate(-14 47 146.5)"></ellipse>
+            <ellipse class="ink-puddle" cx="101" cy="145.5" rx="4.6" ry="2.4" transform="rotate(11 101 145.5)"></ellipse>
+            <path class="ink-puddle" d="M 50 143 Q 55 135 74 136 Q 92 135 97 143 Q 96 150 74 150 Q 53 150 50 143 Z"></path>
+            <path class="ink-puddle-2" d="M 54 150 Q 66 155 92 149 Q 84 154 70 154 Q 58 154 54 150 Z"></path>
+          </g>
+
+        </svg>
+      </div>
+      <div class="intro" style="position: relative;">
+        <div class="pets" aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%;">
+          <div class="pet pet-cat"><img src="cat.png" alt=""></div>
+          <div class="pet pet-dog"><img src="dog.png" alt=""></div>
+        </div>
+        <div class="stamps" aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%;">
+          <div class="stamp stamp-cat"><img src="paw-cat.png" alt=""></div>
+          <div class="stamp stamp-dog"><img src="paw-dog.png" alt=""></div>
+        </div>
+        <h2 id="target-title">你好，我是胡方峥</h2>
+        <p class="big-data">大数据专业学生，貌似被大数据精准拿捏……</p>
+        <p class="who-cares">从从容容还是连滚带爬？Who cares！</p>
+      </div>
+    </section>
+
+    <h2 id="hobby">我的爱好</h2>
+    <section class="hobbies">
+      <article class="hobby">
+        <h3>动漫</h3>
+        <p>人总得爱着些什么</p>
+        <a href="#project-1">瞧一瞧</a>
+      </article>
+      <article class="hobby">
+        <h3>摄影</h3>
+        <p>留存此刻升温的光线和弥漫的烟</p>
+        <a href="#project-2">看一看</a>
+      </article>
+      <article class="hobby">
+        <h3>听歌</h3>
+        <p>年少时的苹果醋，长大后的八加一</p>
+        <a href="#project-3">内藏乾坤</a>
+      </article>
+    </section>
+
+    <section class="details">
+      <h2>兴趣图鉴</h2>
+      <h3 id="project-1">动漫</h3>
+      <div class="swiper gallery-swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><img src="img_dongman/animation_1.jpg" alt="精选动漫图片"></div>
+          <div class="swiper-slide"><img src="img_dongman/animation_2.png" alt="精选动漫图片" style="object-position:right center"></div>
+          <div class="swiper-slide"><img src="img_dongman/animation_3.jpg" alt="精选动漫图片"></div>
+          <div class="swiper-slide"><img src="img_dongman/animation_4.jpg" alt="精选动漫图片"></div>
+          <div class="swiper-slide"><img src="img_dongman/animation_5.jpg" alt="精选动漫图片"></div>
+          <div class="swiper-slide"><img src="img_dongman/animation_6.jpg" alt="精选动漫图片"></div>
+          <div class="swiper-slide"><img src="img_dongman/animation_7.jpg" alt="精选动漫图片"></div>
+          <div class="swiper-slide"><img src="img_dongman/animation_8.jpg" alt="精选动漫图片"></div>
+          <div class="swiper-slide"><img src="img_dongman/animation_9.jpg" alt="精选动漫图片"></div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+
+      <h3 id="project-2">摄影</h3>
+      <div class="swiper gallery-swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><img src="img_sheying/photo_1.jpg" alt="照片"></div>
+          <div class="swiper-slide"><img src="img_sheying/photo_2.jpg" alt="照片"></div>
+          <div class="swiper-slide"><img src="img_sheying/photo_3.jpg" alt="照片"></div>
+          <div class="swiper-slide"><img src="img_sheying/photo_4.jpg" alt="照片"></div>
+          <div class="swiper-slide"><img src="img_sheying/photo_5.jpg" alt="照片"></div>
+          <div class="swiper-slide"><img src="img_sheying/photo_6.jpg" alt="照片"></div>
+          <div class="swiper-slide"><img src="img_sheying/photo_7.jpg" alt="照片"></div>
+          <div class="swiper-slide"><img src="img_sheying/photo_8.jpg" alt="照片"></div>
+          <div class="swiper-slide"><img src="img_sheying/photo_9.jpg" alt="照片"></div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+
+      <h3 id="project-3">听歌</h3>
+
+      <div class="swiper gallery-swiper" data-no-dots="true">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><img src="img_tingge/1.png" alt="歌手"></div>
+          <div class="swiper-slide"><img src="img_tingge/2.png" alt="歌手"></div>
+          <div class="swiper-slide"><img src="img_tingge/3.png" alt="歌手"></div>
+          <div class="swiper-slide"><img src="img_tingge/1.png" alt="歌手"></div>
+          <div class="swiper-slide"><img src="img_tingge/2.png" alt="歌手"></div>
+          <div class="swiper-slide"><img src="img_tingge/3.png" alt="歌手"></div>
+          <div class="swiper-slide"><img src="img_tingge/1.png" alt="歌手"></div>
+          <div class="swiper-slide"><img src="img_tingge/2.png" alt="歌手"></div>
+          <div class="swiper-slide"><img src="img_tingge/3.png" alt="歌手"></div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+    </section>
+
+
+
+    <section class="contact" id="contact">
+      <h2>联系我</h2>
+      <p>车马尘嚣中我们窃窃私语</p>
+      <p>邮箱：<a href="mailto:2589345978@qq.com">2589345978@qq.com</a><br>
+        QQ：<a href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2589345978&website=www.oicqzone.com">2589345978</a></p>
+    </section>
+
+    <footer>为3d的我创造一张2d名片</footer>
+  </main>
+
+  <script>
+    (function () {
+      var canvas = document.getElementById('bg-waves');
+      if (!canvas || !canvas.getContext) return;
+
+      var ctx = canvas.getContext('2d', { alpha: false });
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      var W = 0, H = 0, dpr = 1;
+      var baseFill = null, layerGrads = [];
+      var ripples = [];
+      var elapsed = 0, last = 0, raf = 0, nextRipple = 0.2;
+
+      /* 时间倍率：0.14 ≈ 放慢 7 倍，单波周期 40s 以上，退成"静谧暗流" */
+      var TIME_SCALE = 0.14;
+
+      /* 七层波：层数越靠下振幅越大、频率越低，形成水的层次与干涉 */
+      var layers = [];
+      for (var i = 0; i < 7; i++) {
+        layers.push({
+          y: 0.24 + i * 0.085,
+          amp: 18 + i * 10,
+          freq: 0.0017 + i * 0.00036,
+          freq2: 0.0041 - i * 0.00018,
+          drift: (i % 2 === 0 ? 1 : -1) * (1.05 + i * 0.20),
+          alpha: 0.62 - i * 0.035,
+          width: 1.8 - i * 0.09,
+          phase: i * 1.15
+        });
+      }
+
+      function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.width = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        /* 通透的浅蓝底：接近白的水色，留出呼吸感 */
+        baseFill = ctx.createLinearGradient(0, 0, W * 0.4, H);
+        baseFill.addColorStop(0, '#0B132B');
+        baseFill.addColorStop(0.35, '#101a33');
+        baseFill.addColorStop(0.68, '#16203c');
+        baseFill.addColorStop(1, '#1C2541');
+
+        /* 每层波各用一档蓝色，层层叠出鲜活的层次 */
+        var palette = ['120,165,235', '140,185,255', '100,145,220', '150,195,255', '115,160,235', '160,200,255', '130,180,245'];
+        layerGrads = layers.map(function (L, i) {
+          var c = palette[i % palette.length];
+          var g = ctx.createLinearGradient(0, 0, W, 0);
+          g.addColorStop(0, 'rgba(' + c + ',0)');
+          g.addColorStop(0.16, 'rgba(' + c + ',.05)');
+          g.addColorStop(0.5, 'rgba(' + c + ',.13)');
+          g.addColorStop(0.84, 'rgba(' + c + ',.05)');
+          g.addColorStop(1, 'rgba(' + c + ',0)');
+          return g;
+        });
+      }
+
+      function drawRipples() {
+        for (var i = ripples.length - 1; i >= 0; i--) {
+          var rp = ripples[i];
+          var p = (elapsed - rp.born) / rp.dur;
+          if (p >= 1) { ripples.splice(i, 1); continue; }
+
+          var ease = 1 - Math.pow(1 - p, 2.2);
+          var rad = 6 + ease * rp.maxR;
+          var a = Math.pow(1 - p, 1.8) * 0.62;
+
+          ctx.save();
+          ctx.translate(rp.x, rp.y);
+          ctx.scale(1, 0.62); /* 压扁成椭圆，模拟水面透视 */
+
+          ctx.beginPath();
+          ctx.arc(0, 0, rad, 0, Math.PI * 2);
+          ctx.strokeStyle = 'rgba(150,190,255,' + (a * 0.55).toFixed(3) + ')';
+          ctx.lineWidth = 1.4;
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(0, 0, rad * 0.72, 0, Math.PI * 2);
+          ctx.strokeStyle = 'rgba(180,210,255,' + (a * 0.35).toFixed(3) + ')';
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+
+          ctx.restore();
+        }
+      }
+
+      function drawWaves() {
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        for (var i = 0; i < layers.length; i++) {
+          var L = layers[i];
+          var y0 = H * L.y;
+          ctx.strokeStyle = layerGrads[i] || 'rgba(56,182,255,.45)';
+
+          ctx.beginPath();
+          for (var x = 0; x <= W + 6; x += 6) {
+            var y = y0
+              + Math.sin(x * L.freq + elapsed * L.drift + L.phase) * L.amp
+              + Math.sin(x * L.freq2 - elapsed * L.drift * 1.6 + 1.7 + L.phase) * L.amp * 0.42
+              + Math.sin(x * 0.0009 + elapsed * 0.45) * 18;
+            if (x === 0) {
+              ctx.moveTo(x, y);
+            } else {
+              ctx.lineTo(x, y);
+            }
+          }
+
+          /* 同一路径描两遍：粗的做柔光，细的做芯线 */
+          ctx.globalAlpha = L.alpha * 0.30;
+          ctx.lineWidth = L.width * 8;
+          ctx.stroke();
+
+          ctx.globalAlpha = L.alpha;
+          ctx.lineWidth = L.width;
+          ctx.stroke();
+        }
+        ctx.globalAlpha = 1;
+      }
+
+      /* 三团缓慢游动的彩色水汽：multiply 叠在水色上，像水彩晕开 */
+      var spots = [
+        { x: 0.20, y: 0.22, r: 0.62, c: '90,130,220', a: 0.10, ax: 0.14, ay: 0.10, ph: 0 },
+        { x: 0.80, y: 0.36, r: 0.55, c: '120,110,220', a: 0.08, ax: 0.10, ay: 0.13, ph: 2.1 },
+        { x: 0.48, y: 0.80, r: 0.62, c: '60,140,210', a: 0.09, ax: 0.12, ay: 0.08, ph: 4.2 }
+      ];
+
+      function drawSpots() {
+        var count = W < 720 ? 2 : spots.length;
+        ctx.globalCompositeOperation = 'screen';
+
+        for (var i = 0; i < count; i++) {
+          var sp = spots[i];
+          var cx = W * (sp.x + sp.ax * Math.sin(elapsed * 0.20 + sp.ph));
+          var cy = H * (sp.y + sp.ay * Math.cos(elapsed * 0.16 + sp.ph));
+          var rad = Math.max(W, H) * sp.r;
+
+          var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, rad);
+          g.addColorStop(0, 'rgba(' + sp.c + ',' + sp.a + ')');
+          g.addColorStop(0.55, 'rgba(' + sp.c + ',' + (sp.a * 0.45).toFixed(3) + ')');
+          g.addColorStop(1, 'rgba(' + sp.c + ',0)');
+          ctx.fillStyle = g;
+
+          /* 只填渐变覆盖到的区域，省性能 */
+          var x0 = Math.max(0, cx - rad), y0 = Math.max(0, cy - rad);
+          var x1 = Math.min(W, cx + rad), y1 = Math.min(H, cy + rad);
+          ctx.fillRect(x0, y0, Math.max(0, x1 - x0), Math.max(0, y1 - y0));
+        }
+
+        ctx.globalCompositeOperation = 'source-over';
+      }
+
+      function render() {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = baseFill;
+        ctx.fillRect(0, 0, W, H);
+
+        drawSpots();
+        drawRipples();
+        drawWaves();
+      }
+
+      function frame(now) {
+        if (!last) last = now;
+        var dt = Math.min((now - last) / 1000, 0.05);
+        last = now;
+        elapsed += dt * TIME_SCALE;
+
+        if (elapsed > nextRipple) {
+          nextRipple = elapsed + 0.45 + Math.random() * 0.85;
+          ripples.push({
+            x: W * (0.08 + Math.random() * 0.84),
+            y: H * (0.10 + Math.random() * 0.88),
+            born: elapsed,
+            dur: 3.4 + Math.random() * 2.6,
+            maxR: 140 + Math.random() * 320
+          });
+          if (ripples.length > 9) ripples.shift();
+        }
+
+        render();
+        raf = requestAnimationFrame(frame);
+      }
+
+      function start() {
+        if (raf) return;
+        last = 0;
+        raf = requestAnimationFrame(frame);
+      }
+
+      function stop() {
+        if (!raf) return;
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+
+      var resizeTimer = 0;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          resize();
+          if (reduceMotion || !raf) render();
+        }, 150);
+      });
+
+      /* 切到后台时停掉动画，省电 */
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) {
+          stop();
+        } else if (!reduceMotion) {
+          start();
+        }
+      });
+
+      resize();
+
+      if (reduceMotion) {
+        /* 系统要求减少动效：只画一帧静态水波 */
+        elapsed = 6;
+        render();
+      } else {
+        start();
+      }
+    })();
+  </script>
+
+  <!-- GSAP：顶部电影级时间轴 -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+  <script>
+    /* 旧版动画：仅当 GSAP 未加载时作为兜底 */
+    (function () {
+      if (window.gsap) return;
+      var stage = document.querySelector('.profile');
+      var field = document.querySelector('.ink-field');
+      var groundEl = document.querySelector('.who-cares');
+      var pets = document.querySelector('.pets');
+      var catEl = document.querySelector('.pet-cat');
+      var dogEl = document.querySelector('.pet-dog');
+      var stamps = document.querySelector('.stamps');
+      var catPaw = document.querySelector('.stamp-cat');
+      var dogPaw = document.querySelector('.stamp-dog');
+      if (!stage || !field || !groundEl || !pets || !catEl || !dogEl) return;
+
+      var NS = 'http://www.w3.org/2000/svg';
+      var GRAVITY = 1500;
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+      var small = window.matchMedia('(max-width: 720px)');
+
+      var parts = [];
+      var pool = null;
+      var poolRx = 2;
+      var travelAnim = null;
+      var startedAt = performance.now();
+      var lastFrame = 0;
+      var spawnAt = 0;
+      var petT0 = null;      /* 人物 18s 走完的时刻 */
+
+      function readPhase() {
+        if (!travelAnim && document.getAnimations) {
+          var list = document.getAnimations();
+          for (var i = 0; i < list.length; i++) {
+            if (list[i].animationName === 'travel') { travelAnim = list[i]; break; }
+          }
+        }
+        return (travelAnim && typeof travelAnim.currentTime === 'number')
+          ? travelAnim.currentTime
+          : performance.now() - startedAt;
+      }
+
+      var mCache = null;
+      var mAt = -1e9;
+
+      function metrics() {
+        var t = performance.now();
+        if (mCache && t - mAt < 240) return mCache;
+        mAt = t;
+        var box = stage.getBoundingClientRect();
+        var avEl = stage.querySelector('.avatar');
+        var av = avEl ? avEl.getBoundingClientRect() : box;
+        var gr = groundEl.getBoundingClientRect();
+        mCache = {
+          originX: av.left - box.left + av.width / 2,
+          originY: av.top - box.top + av.height * 0.85,
+          ground: gr.bottom - box.top - 1,
+          left: 10,
+          right: box.width - 10
+        };
+        return mCache;
+      }
+
+      function spawn(m, count) {
+        for (var i = 0; i < count; i++) {
+          if (parts.length > 110) return;
+          var r = 1.8 + Math.random() * 2.4;
+          var el = document.createElementNS(NS, 'ellipse');
+          el.setAttribute('fill', 'rgba(226, 232, 246, ' + (0.6 + Math.random() * 0.3).toFixed(2) + ')');
+          field.appendChild(el);
+          parts.push({
+            el: el,
+            x: m.originX + (Math.random() - 0.5) * 34,
+            y: m.originY + (Math.random() - 0.5) * 6,
+            vx: (Math.random() - 0.5) * 26,
+            vy: 8 + Math.random() * 30,
+            rx: r,
+            ry: r * 1.15,
+            landed: false,
+            dir: Math.random() < 0.5 ? -1 : 1
+          });
+        }
+      }
+
+      function ensurePool(m) {
+        if (pool) return;
+        poolRx = 2;
+        pool = document.createElementNS(NS, 'ellipse');
+        pool.setAttribute('fill', 'rgba(222, 230, 248, 0.42)');
+        pool.setAttribute('cx', m.originX);
+        pool.setAttribute('cy', m.ground - 2.6);
+        pool.setAttribute('rx', 2);
+        pool.setAttribute('ry', 2.6);
+        pool.setAttribute('opacity', '0');
+        if (field.insertBefore && field.firstChild) field.insertBefore(pool, field.firstChild);
+        else field.appendChild(pool);
+      }
+
+      function clear() {
+        for (var i = 0; i < parts.length; i++) {
+          if (parts[i].el.parentNode) parts[i].el.parentNode.removeChild(parts[i].el);
+        }
+        parts.length = 0;
+        if (pool && pool.parentNode) pool.parentNode.removeChild(pool);
+        pool = null;
+        poolRx = 2;
+      }
+
+      /* ---------- 猫狗：实测锚点坐标 + 逐帧写死 left/top ---------- */
+      var T_JUMP = 1760;     /* 第一段 1.76s */
+      var T_HOLD = 880;      /* 半空停顿 0.88s */
+      var T_JUMP2 = 1760;    /* 第二段 1.76s */
+      var DOG_DELAY = 500;   /* 狗晚 0.5s */
+
+      var journeyT = 0;
+      var petDone = false;
+      var stamped = false;
+      var geo = null;
+
+      function measure() {
+        var box = stage.getBoundingClientRect();
+        var pb = pets.getBoundingClientRect();                 /* 猫狗容器（.pets） */
+        var avEl = stage.querySelector('.avatar');
+        var av = avEl ? avEl.getBoundingClientRect() : box;
+        var gr = groundEl.getBoundingClientRect();
+
+        /* 锚点取不到也不能抛异常，否则整段位移会停住 */
+        var l1El = document.querySelector('.big-data') || groundEl;
+        var h2El = document.getElementById('target-title') || stage.querySelector('h2') || l1El;
+        var l1 = l1El.getBoundingClientRect();
+        var h2 = h2El.getBoundingClientRect();
+
+        var cw = catEl.offsetWidth || 104;
+        var ch = catEl.offsetHeight || 106;
+        var dw = dogEl.offsetWidth || 132;
+        var dh = dogEl.offsetHeight || 136;
+        var gap = 8;
+        var total = cw + gap + dw;
+        var maxH = Math.max(ch, dh);
+
+        var ox = pb.left;
+        var oy = pb.top;
+        var limitL = 8 - (pb.left - box.left);
+        var limitR = box.width - total - 8 - (pb.left - box.left);
+
+        function clampX(v) {
+          return Math.min(Math.max(limitL, v), Math.max(limitL, limitR));
+        }
+
+        /* 起点：墨团正下方、地面之上 */
+        var sx = clampX(av.left + av.width / 2 - ox - total / 2);
+        var gY = gr.bottom - oy - 2;
+
+        /* 第一落点：「大数据」行正上方（该行中心 - 整体半宽） */
+        var x1 = clampX(l1.left + l1.width / 2 - ox - total / 2);
+        var b1 = (l1.top - oy) - 16;
+
+        /* 强制左对齐：猫狗左边缘对齐「你好」文字左边缘，再右移 20px 防贴边 */
+        var x2 = clampX(h2.left - ox + 20);
+        var b2 = (h2.top - oy) - 80;
+        /* 兜底：抬得再高也不能让猫狗顶出卡片上沿 */
+        b2 = Math.max(b2, 10 + maxH - oy);
+
+        var top0 = gY - maxH;
+        var top1 = b1 - maxH;
+        var top2 = b2 - maxH;
+
+        geo = {
+          cw: cw,
+          ch: ch,
+          dh: dh,
+          gap: gap,
+          sx: sx,
+          gY: gY,
+          x1: x1,
+          b1: b1,
+          x2: x2,
+          b2: b2,
+          h2x: h2.left - ox,
+          h2y: h2.top - oy,
+          h2h: h2.height,
+          jh1: Math.min(60, Math.max(18, (top0 + top1) / 2 + oy - 10)),
+          jh2: Math.min(50, Math.max(14, (top1 + top2) / 2 + oy - 10))
+        };
+        return geo;
+      }
+
+      /* 单只动物的行程：抛物线 + 停顿，直接写 left/top 像素值 */
+      function pose(el, x0, y0, x1, y1, x2, y2, t, delay, h1, h2) {
+        var tau = t - delay;
+        var x, y;
+
+        if (tau <= 0) {
+          x = x0;
+          y = y0;
+        } else if (tau < T_JUMP) {
+          var p = tau / T_JUMP;
+          x = x0 + (x1 - x0) * p;
+          y = y0 + (y1 - y0) * p - h1 * 4 * p * (1 - p);
+        } else if (tau < T_JUMP + T_HOLD) {
+          x = x1;
+          y = y1;
+        } else if (tau < T_JUMP + T_HOLD + T_JUMP2) {
+          var q = (tau - T_JUMP - T_HOLD) / T_JUMP2;
+          x = x1 + (x2 - x1) * q;
+          y = y1 + (y2 - y1) * q - h2 * 4 * q * (1 - q);
+        } else {
+          x = x2;
+          y = y2;
+        }
+
+        el.style.left = x.toFixed(1) + 'px';
+        el.style.top = y.toFixed(1) + 'px';
+      }
+
+      function poseAll(t) {
+        var g = geo || measure();
+        pose(catEl, g.sx, g.gY - g.ch, g.x1, g.b1 - g.ch, g.x2, g.b2 - g.ch, t, 0, g.jh1, g.jh2);
+        pose(dogEl, g.sx + g.cw + g.gap, g.gY - g.dh, g.x1 + g.cw + g.gap, g.b1 - g.dh,
+             g.x2 + g.cw + g.gap, g.b2 - g.dh, t, DOG_DELAY, g.jh1, g.jh2);
+      }
+
+      /* 爪印落在标题行上：左对齐标题文字，约在行中线 */
+      function placePaws() {
+        if (!stamps || !catPaw || !dogPaw) return;
+        var g = geo || measure();
+        var cw2 = catPaw.offsetWidth || 104;
+        var ch2 = catPaw.offsetHeight || 107;
+        var dw2 = dogPaw.offsetWidth || 100;
+        var dh2 = dogPaw.offsetHeight || 92;
+
+        var baseX = g.h2x + 10;
+        /* 爪印底边锚在标题上沿往上 10px，绝不压住文字 */
+        var pawBottom = g.h2y - 10;
+
+        catPaw.style.left = baseX.toFixed(1) + 'px';
+        catPaw.style.top = (pawBottom - ch2).toFixed(1) + 'px';
+        dogPaw.style.left = (baseX + cw2 + 8).toFixed(1) + 'px';
+        dogPaw.style.top = (pawBottom - dh2).toFixed(1) + 'px';
+      }
+
+      /* 猫狗缩小消失 → 爪印砸下 → 卡片震动 */
+      function stampNow() {
+        placePaws();
+        pets.classList.add('is-gone');
+        if (stamps) stamps.classList.add('is-hit');
+        stage.classList.add('is-hit');
+      }
+
+      if (window.addEventListener) {
+        window.addEventListener('resize', function () {
+          mCache = null;
+          geo = null;
+          petDone = false;
+          if (petT0 !== null) {
+            measure();
+            poseAll(journeyT);
+            if (stamped) placePaws();
+          }
+        });
+      }
+
+      /* ---------- 主循环 ---------- */
+      function tick(now) {
+        requestAnimationFrame(tick);
+
+        if (reduce.matches) {
+          clear();
+          pets.classList.remove('is-in');
+          return;
+        }
+
+        var phase = readPhase();
+        var finished = travelAnim && travelAnim.playState === 'finished';
+
+        /* 人物走完 → 墨滩化形，猫狗淡入站上隐形地面 */
+        if (petT0 === null && (finished || phase >= 17980)) {
+          petT0 = now;
+          measure();
+          poseAll(0);
+          pets.classList.add('is-in');
+
+          /* 兜底：万一 rAF 被浏览器节流，定时器仍会把最终坐标写死 */
+          setTimeout(function () {
+            measure();
+            poseAll(1e6);
+            petDone = true;
+          }, 6400);
+        }
+
+        /* 待机 1.4 秒后开始两段行程，每帧把算好的像素写进 left/top */
+        if (petT0 !== null && !petDone) {
+          journeyT = Math.max(0, now - petT0 - 1400);
+          poseAll(journeyT);
+          if (journeyT > T_JUMP + T_HOLD + T_JUMP2 + DOG_DELAY + 200) petDone = true;
+
+          /* 两只都落地后 → 盖章变身 */
+          if (!stamped && journeyT > 5000) {
+            stamped = true;
+            stampNow();
+          }
+        }
+
+        var spawning = petT0 === null && phase > 14800 && phase < 16800;
+        if (!spawning && !parts.length) { lastFrame = now; return; }
+
+        var m = metrics();
+        if (spawning && now - spawnAt > 58) {
+          spawnAt = now;
+          spawn(m, small.matches ? 1 : 2);
+        }
+        if (!parts.length) { lastFrame = now; return; }
+
+        var dt = lastFrame ? Math.min(0.034, (now - lastFrame) / 1000) : 0.016;
+        lastFrame = now;
+
+        var fade = 1;
+        if (petT0 !== null) {
+          var k = (now - petT0) / 420;
+          fade = k >= 1 ? 0 : 1 - k;
+        }
+
+        if (parts.length) ensurePool(m);
+        if (pool) {
+          var limit = Math.min(150, m.right - m.originX - 4, m.originX - m.left - 4);
+          poolRx += (Math.max(20, limit) - poolRx) * Math.min(1, dt * 1.6);
+          var poolRy = 2.6 + poolRx * 0.012;
+          pool.setAttribute('rx', poolRx.toFixed(1));
+          pool.setAttribute('ry', poolRy.toFixed(2));
+          pool.setAttribute('cy', (m.ground - poolRy).toFixed(2));
+          pool.setAttribute('opacity', (0.5 * fade).toFixed(2));
+        }
+
+        for (var i = parts.length - 1; i >= 0; i--) {
+          var p = parts[i];
+
+          if (!p.landed) {
+            p.vy += GRAVITY * dt;
+            p.x += p.vx * dt;
+            p.y += p.vy * dt;
+
+            if (p.y + p.ry >= m.ground) {
+              p.y = m.ground - p.ry;
+              p.landed = true;
+              p.vx = p.dir * (70 + Math.random() * 90);
+              p.vy = 0;
+              p.ry = Math.max(2, p.ry * 0.6);
+              p.rx *= 1.35;
+            }
+          } else {
+            p.vx *= Math.pow(0.4, dt);
+            p.x += p.vx * dt;
+            p.rx += Math.abs(p.vx) * dt * 0.14;
+
+            if (p.x - p.rx < m.left) { p.x = m.left + p.rx; p.vx = Math.abs(p.vx) * 0.35; }
+            if (p.x + p.rx > m.right) { p.x = m.right - p.rx; p.vx = -Math.abs(p.vx) * 0.35; }
+          }
+
+          p.el.setAttribute('cx', p.x.toFixed(1));
+          p.el.setAttribute('cy', p.y.toFixed(1));
+          p.el.setAttribute('rx', p.rx.toFixed(2));
+          p.el.setAttribute('ry', p.ry.toFixed(2));
+          p.el.setAttribute('opacity', fade.toFixed(2));
+        }
+
+        if (fade <= 0) clear();
+      }
+
+      requestAnimationFrame(tick);
+    })();
+  </script>
+
+  <!-- 图片灯箱 -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="图片预览">
+    <img alt="">
+    <p class="lightbox-hint">点击任意处或按 Esc 关闭</p>
+  </div>
+
+  <!-- Swiper：3D 画廊轮播 -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    (function () {
+      var boxes = document.querySelectorAll('.gallery-swiper');
+      if (!boxes.length) return;
+
+      /* CDN 拿不到时退化成可横向滑动的普通画廊，不至于白屏 */
+      if (typeof window.Swiper !== 'function') {
+        for (var i = 0; i < boxes.length; i++) boxes[i].classList.add('no-swiper');
+        return;
+      }
+
+      for (var j = 0; j < boxes.length; j++) {
+        new Swiper(boxes[j], {
+          effect: 'coverflow',
+          grabCursor: true,
+          centeredSlides: true,
+          slidesPerView: 'auto',
+          loop: true,
+          /* 循环缓冲：多复制 5 张参与拼接，保证右侧永远有"下一张"可滑入 */
+          loopedSlides: 5,
+          loopAdditionalSlides: 3,
+          speed: 700,
+          spaceBetween: 18,
+          autoplay: {
+            delay: 2600,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+            stopOnLastSlide: false,
+            waitForTransition: true
+          },
+          coverflowEffect: {
+            rotate: 16,
+            stretch: 0,
+            depth: 140,
+            modifier: 1.1,
+            slideShadows: false
+          },
+          pagination: boxes[j].getAttribute('data-no-dots') === 'true' ? false : {
+            el: boxes[j].querySelector('.swiper-pagination'),
+            clickable: true
+          },
+          navigation: {
+            nextEl: boxes[j].querySelector('.swiper-button-next'),
+            prevEl: boxes[j].querySelector('.swiper-button-prev')
+          },
+          keyboard: { enabled: true }
+        });
+      }
+    })();
+  </script>
+
+  <!-- 图片灯箱：原生 JS，不依赖任何插件 -->
+  <script>
+    (function () {
+      var box = document.getElementById('lightbox');
+      if (!box) return;
+      var bigImg = box.querySelector('img');
+
+      var downX = 0;
+      var downY = 0;
+      var dragged = false;
+
+      /* 记录按下位置，用来区分"点击"和"拖动 Swiper" */
+      document.addEventListener('pointerdown', function (e) {
+        downX = e.clientX;
+        downY = e.clientY;
+        dragged = false;
+      }, true);
+
+      document.addEventListener('pointermove', function (e) {
+        if (Math.abs(e.clientX - downX) > 10 || Math.abs(e.clientY - downY) > 10) dragged = true;
+      }, true);
+
+      /* 事件委托：三个画廊里的图片统一处理 */
+      document.addEventListener('click', function (e) {
+        var t = e.target;
+        if (!t || t.tagName !== 'IMG') return;
+
+        var host = t.closest('.gallery-swiper');
+        if (!host) return;
+
+        /* 拖动过，或 Swiper 判定这次不是有效点击 → 不弹窗 */
+        if (dragged) return;
+        if (host.swiper && host.swiper.allowClick === false) return;
+
+        open(t.getAttribute('src'), t.getAttribute('alt'));
+      }, true);
+
+      function open(src, alt) {
+        if (!src) return;
+        bigImg.setAttribute('src', src);
+        bigImg.setAttribute('alt', alt || '');
+        box.classList.add('is-open');
+        box.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function close() {
+        box.classList.remove('is-open');
+        box.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        /* 等淡出结束再清掉 src，避免下次打开时闪一下旧图 */
+        setTimeout(function () {
+          if (!box.classList.contains('is-open')) bigImg.removeAttribute('src');
+        }, 320);
+      }
+
+      /* 点遮罩或点图片本身都关闭 */
+      box.addEventListener('click', close);
+
+      document.addEventListener('keydown', function (e) {
+        if ((e.key === 'Escape' || e.key === 'Esc') && box.classList.contains('is-open')) close();
+      });
+    })();
+  </script>
+
+  <!-- 水晶球星光：Canvas 粒子（6 种形状 × 3 种颜色，150~200 颗） -->
+  <script>
+    (function () {
+      var canvas = document.getElementById('bg-stars');
+      if (!canvas || !canvas.getContext) return;
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      var ctx = canvas.getContext('2d');
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var SPRITE = 64;
+      var SIZE_SCALE = 5;          /* 星星整体放大 5 倍（想回调就改这里） */
+      var W = 0;
+      var H = 0;
+      var sprites = [];
+      var parts = [];
+      var running = true;
+      var t = 0;
+      var last = 0;
+      var shadowScale = 1;         /* 阴影发光强度系数（性能不足时自动降低） */
+      var statFrames = 0;
+      var statTime = 0;
+
+      /* 形状：四角星芒 / 六角星 / 拉长十字光 / 菱形光斑 / 六边形碎片 / 微光点 */
+      var SHAPES = ['star4', 'star6', 'flare', 'diamond', 'hex', 'dot'];
+      var SHAPE_WEIGHT = [16, 22, 18, 20, 14, 10];
+      var SHAPE_SIZE = {
+        star4: [6, 12],
+        star6: [5, 11],
+        flare: [7, 12],
+        diamond: [4, 9],
+        hex: [2.5, 6],
+        dot: [2, 4]
+      };
+
+      /* 颜色：深琥珀金 / 暗金 / 星光蓝 */
+      var COLORS = [[212, 175, 55], [184, 134, 11], [30, 144, 255]];
+      var COLOR_WEIGHT = [55, 30, 15];
+
+      function rand(a, b) { return a + Math.random() * (b - a); }
+
+      function pick(weights) {
+        var total = 0;
+        var i;
+        for (i = 0; i < weights.length; i++) total += weights[i];
+        var r = Math.random() * total;
+        for (i = 0; i < weights.length; i++) {
+          r -= weights[i];
+          if (r <= 0) return i;
+        }
+        return weights.length - 1;
+      }
+
+      function makeSprite(kind, rgb) {
+        var c = document.createElement('canvas');
+        c.width = c.height = SPRITE;
+        var g = c.getContext('2d');
+        var cx = SPRITE / 2;
+        var cy = SPRITE / 2;
+        var R = SPRITE * 0.44;
+        var col = rgb.join(', ');
+        var i, ang, x, y, rr;
+
+        /* 底层柔光 */
+        var rg = g.createRadialGradient(cx, cy, 0, cx, cy, cx);
+        rg.addColorStop(0, 'rgba(' + col + ',0.55)');
+        rg.addColorStop(0.4, 'rgba(' + col + ',0.16)');
+        rg.addColorStop(1, 'rgba(' + col + ',0)');
+        g.fillStyle = rg;
+        g.beginPath();
+        g.arc(cx, cy, cx, 0, Math.PI * 2);
+        g.fill();
+
+        g.fillStyle = 'rgba(' + col + ',1)';
+
+        if (kind === 'star4' || kind === 'star6') {
+          var spikes = kind === 'star4' ? 4 : 6;
+          var inner = kind === 'star4' ? 0.16 : 0.44;
+          g.beginPath();
+          for (i = 0; i < spikes * 2; i++) {
+            rr = (i % 2 === 0) ? R : R * inner;
+            ang = -Math.PI / 2 + i * Math.PI / spikes;
+            x = cx + Math.cos(ang) * rr;
+            y = cy + Math.sin(ang) * rr;
+            if (i === 0) g.moveTo(x, y); else g.lineTo(x, y);
+          }
+          g.closePath();
+          g.fill();
+
+        } else if (kind === 'flare') {
+          /* ✨ 拉长十字：两条主光 + 两条 45° 短芒 */
+          g.save();
+          g.translate(cx, cy);
+          /* 横向光用水平渐变，纵向光用垂直渐变，避免光心偏移 */
+          var lgH = g.createLinearGradient(-R, 0, R, 0);
+          lgH.addColorStop(0, 'rgba(' + col + ',0)');
+          lgH.addColorStop(0.5, 'rgba(' + col + ',1)');
+          lgH.addColorStop(1, 'rgba(' + col + ',0)');
+          g.fillStyle = lgH;
+          g.beginPath();
+          g.ellipse(0, 0, R, R * 0.085, 0, 0, Math.PI * 2);
+          g.fill();
+
+          var lgV = g.createLinearGradient(0, -R, 0, R);
+          lgV.addColorStop(0, 'rgba(' + col + ',0)');
+          lgV.addColorStop(0.5, 'rgba(' + col + ',1)');
+          lgV.addColorStop(1, 'rgba(' + col + ',0)');
+          g.fillStyle = lgV;
+          g.beginPath();
+          g.ellipse(0, 0, R * 0.085, R, 0, 0, Math.PI * 2);
+          g.fill();
+
+          g.globalAlpha = 0.7;
+          g.beginPath();
+          g.ellipse(0, 0, R * 0.6, R * 0.05, Math.PI / 4, 0, Math.PI * 2);
+          g.fill();
+          g.beginPath();
+          g.ellipse(0, 0, R * 0.6, R * 0.05, -Math.PI / 4, 0, Math.PI * 2);
+          g.fill();
+          g.restore();
+
+        } else if (kind === 'diamond') {
+          g.beginPath();
+          g.moveTo(cx, cy - R);
+          g.quadraticCurveTo(cx + R * 0.28, cy, cx, cy + R);
+          g.quadraticCurveTo(cx - R * 0.28, cy, cx, cy - R);
+          g.closePath();
+          g.fill();
+
+        } else if (kind === 'hex') {
+          g.beginPath();
+          for (i = 0; i < 6; i++) {
+            ang = -Math.PI / 2 + i * Math.PI / 3;
+            x = cx + Math.cos(ang) * R * 0.62;
+            y = cy + Math.sin(ang) * R * 0.62;
+            if (i === 0) g.moveTo(x, y); else g.lineTo(x, y);
+          }
+          g.closePath();
+          g.fill();
+        }
+
+        return c;
+      }
+
+      function buildSprites() {
+        sprites = [];
+        for (var s = 0; s < SHAPES.length; s++) {
+          var row = [];
+          for (var c = 0; c < COLORS.length; c++) row.push(makeSprite(SHAPES[s], COLORS[c]));
+          sprites.push(row);
+        }
+      }
+
+      function makeParticle(anywhere) {
+        var si = pick(SHAPE_WEIGHT);
+        var ci = pick(COLOR_WEIGHT);
+        var depth = Math.pow(Math.random(), 1.5);      /* 大部分偏小 = 远 */
+        var range = SHAPE_SIZE[SHAPES[si]];
+        var vy = 6 + Math.pow(depth, 1.35) * 84;       /* 6 ~ 90 px/s */
+        if (ci === 2) vy *= 1.25;                      /* 星光蓝跑得稍快 */
+
+        return {
+          s: si,
+          c: ci,
+          size: (range[0] + (range[1] - range[0]) * depth) * SIZE_SCALE,
+          x: Math.random() * W,
+          y: anywhere ? rand(-H * 0.25, H) : rand(-90, -12),
+          vy: vy,
+          amp: rand(6, 48),
+          freq: rand(0.2, 0.8),
+          phase: Math.random() * Math.PI * 2,
+          rot: Math.random() * Math.PI * 2,
+          vrot: rand(-0.45, 0.45),
+          tw: rand(0.6, 2.0),
+          twPhase: Math.random() * Math.PI * 2,
+          alpha: rand(0.7, 1)
+        };
+      }
+
+      function mobile() {
+        return window.innerWidth < 720 ||
+          /Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(navigator.userAgent);
+      }
+
+      function resize() {
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.width = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
+
+        var n = Math.round((W * H) / 7000);
+        if (mobile()) n = Math.min(80, Math.max(50, n));
+        else n = Math.min(200, Math.max(150, n));
+
+        parts.length = 0;
+        for (var i = 0; i < n; i++) parts.push(makeParticle(true));
+      }
+
+      function frame(now) {
+        if (!running) return;
+        requestAnimationFrame(frame);
+
+        var raw = last ? now - last : 16;
+        var dt = Math.min(0.05, raw / 1000);
+        last = now;
+        t += dt;
+
+        /* 阴影模糊较吃性能：连续测得平均帧 > 26ms 就关掉，仅保留精灵自带柔光 */
+        statTime += raw;
+        if (++statFrames >= 90) {
+          var avg = statTime / statFrames;
+          if (avg > 26) shadowScale = 0.32;        /* 掉到 ~38fps 以下：光晕收窄，不至于卡 */
+          else if (avg < 18) shadowScale = 1;      /* 流畅时恢复全强度 */
+          statFrames = 0;
+          statTime = 0;
+        }
+
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (var i = 0; i < parts.length; i++) {
+          var p = parts[i];
+
+          p.y += p.vy * dt;
+          p.rot += p.vrot * dt;
+
+          if (p.y - p.size > H + 60) {
+            parts[i] = makeParticle(false);
+            continue;
+          }
+
+          var a = p.alpha * (0.88 + 0.12 * Math.sin(t * p.tw + p.twPhase));
+          if (a <= 0.02) continue;
+
+          var px = p.x + Math.sin(t * p.freq + p.phase) * p.amp;
+          var s = p.size / SPRITE * dpr;
+          /* 快的粒子纵向拉长，形成流星拖尾 */
+          var stretch = p.vy > 58 ? 1 + (p.vy - 58) / 58 * 1.5 : 1;
+          var kx = s / Math.sqrt(stretch);
+          var ky = s * stretch;
+
+          var co = Math.cos(p.rot);
+          var si = Math.sin(p.rot);
+
+          ctx.setTransform(co * kx, si * kx, -si * ky, co * ky, px * dpr, p.y * dpr);
+          ctx.globalAlpha = a > 1 ? 1 : a;
+
+          /* 边缘发光：颜色取自该星星本身，模糊半径随尺寸走 */
+          ctx.shadowColor = 'rgba(' + COLORS[p.c].join(',') + ',0.85)';
+          ctx.shadowBlur = Math.min(42, (4 + p.size * dpr * 0.55) * shadowScale);
+
+          ctx.drawImage(sprites[p.s][p.c], -SPRITE / 2, -SPRITE / 2);
+        }
+
+        ctx.globalAlpha = 1;
+        ctx.shadowBlur = 0;
+      }
+
+      buildSprites();
+      resize();
+      requestAnimationFrame(frame);
+
+      var rt;
+      window.addEventListener('resize', function () {
+        clearTimeout(rt);
+        rt = setTimeout(resize, 180);
+      });
+
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) {
+          running = false;
+        } else if (!running) {
+          running = true;
+          last = 0;
+          requestAnimationFrame(frame);
+        }
+      });
+    })();
+  </script>
+
+  <!-- 顶部动画总导演：GSAP 时间轴（5 个阶段严格串行，互不冲突） -->
+  <script>
+    (function () {
+      if (!window.gsap) return;                 /* 没有 GSAP 时交给旧版 CSS/JS 动画 */
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      var stage = document.querySelector('.profile');
+      if (!stage) return;
+
+      var avatar = stage.querySelector('.avatar');
+      var glyph = stage.querySelector('.glyph');
+      var morph = stage.querySelector('.morph');
+      var melt = stage.querySelector('.melt');
+      var field = document.querySelector('.ink-field');
+      var petsEl = document.querySelector('.pets');
+      var catEl = document.querySelector('.pet-cat');
+      var dogEl = document.querySelector('.pet-dog');
+      var catPaw = document.querySelector('.stamp-cat');
+      var dogPaw = document.querySelector('.stamp-dog');
+      var groundEl = document.querySelector('.who-cares');
+      var dataEl = document.querySelector('.big-data');
+      var titleEl = document.getElementById('target-title');
+      if (!avatar || !field || !petsEl || !catEl || !dogEl || !groundEl) return;
+
+      stage.classList.add('gs');
+
+      /* ---------- 量尺寸 ---------- */
+      var pr = stage.getBoundingClientRect();
+      var pb = petsEl.getBoundingClientRect();
+      var ox = pb.left, oy = pb.top;
+      var gr = groundEl.getBoundingClientRect();
+      var l1 = dataEl.getBoundingClientRect();
+      var h2 = titleEl.getBoundingClientRect();
+
+      var cw = catEl.offsetWidth || 104;
+      var ch = catEl.offsetHeight || 106;
+      var dw = dogEl.offsetWidth || 132;
+      var dh = dogEl.offsetHeight || 136;
+      var gap = 8;
+      var total = cw + gap + dw;
+      var maxH = Math.max(ch, dh);
+
+      var endLeft = pr.width - 160;               /* 与 CSS --travel-end 对齐 */
+      var poolX = endLeft + 70;                   /* 侠客圆盘中心 */
+
+      var limitL = 8 - (pb.left - pr.left);
+      var limitR = pr.width - total - 8 - (pb.left - pr.left);
+      function clampX(v) {
+        return Math.min(Math.max(limitL, v), Math.max(limitL, limitR));
+      }
+
+      var startX = clampX(poolX - ox - total / 2);
+      var x1 = clampX(l1.left + l1.width / 2 - ox - total / 2);
+      var x2 = clampX(h2.left - ox + 20);
+      var b1 = (l1.top - oy) - 18;
+      var b2 = (h2.top - oy) - 18;
+      var groundY = (gr.bottom - oy) - 2;
+
+      function arcFor(fromB, toB, want) {
+        var peak = (fromB + toB) / 2 - want;
+        var floorB = (8 - oy) + maxH;
+        if (peak < floorB) want = (fromB + toB) / 2 - floorB;
+        return Math.max(14, want);
+      }
+      var arc1 = arcFor(groundY, b1, 58);
+      var arc2 = arcFor(b1, b2, 42);
+
+      var pGround = gr.bottom - pr.top - 2;                 /* .profile 坐标 */
+      var pFeet = (avatar.getBoundingClientRect().top - pr.top) + 118;
+      var offX = pb.left - pr.left;
+      var catCx = offX + startX + cw / 2;
+      var dogCx = offX + startX + cw + gap + dw / 2;
+
+      /* ---------- 初始态 ---------- */
+      gsap.set(avatar, { left: 20, opacity: 0 });
+      gsap.set(glyph, { opacity: 1, scale: 1, transformOrigin: '50% 50%' });
+      gsap.set(morph, { opacity: 0, filter: 'blur(10px)' });
+      gsap.set(catEl, {
+        left: startX, top: groundY - ch, opacity: 0,
+        scaleY: .04, transformOrigin: '50% 100%', filter: 'blur(6px)'
+      });
+      gsap.set(dogEl, {
+        left: startX + cw + gap, top: groundY - dh, opacity: 0,
+        scaleY: .04, transformOrigin: '50% 100%', filter: 'blur(6px)'
+      });
+      gsap.set([catPaw, dogPaw], { opacity: 0 });
+
+      var NS = 'http://www.w3.org/2000/svg';
+      function ink(fill) {
+        var el = document.createElementNS(NS, 'ellipse');
+        el.setAttribute('fill', fill);
+        field.appendChild(el);
+        return el;
+      }
+
+      var tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+
+      /* ===== ① 神球 → 斗笠侠客 ===== */
+      tl.to(glyph, { opacity: 0, scale: 1.45, filter: 'blur(10px)', duration: .85 }, 0)
+        .to(avatar, { opacity: 1, duration: .35 }, 0)
+        .to(morph, { opacity: 1, filter: 'blur(0px)', duration: .8 }, .3)
+        .to(avatar, { left: endLeft, duration: 1.4, ease: 'sine.inOut' }, 1.15);
+
+      /* ===== ② 站定 1 秒 → 塌成一团悬浮墨团 ===== */
+      var T_MELT = 3.5;
+      tl.to(melt, {
+        scaleY: .12, scaleX: 1.06, y: 26, opacity: 0, filter: 'blur(7px)',
+        duration: .7, ease: 'power2.in'
+      }, T_MELT)
+        .to(avatar, { opacity: 0, duration: .45 }, T_MELT + .45);
+
+      var blob = ink('rgba(216, 228, 244, .92)');
+      gsap.set(blob, { attr: { cx: poolX, cy: pFeet - 14, rx: 30, ry: 34 }, opacity: 0 });
+
+      tl.to(blob, { opacity: .92, duration: .2 }, T_MELT + .1)
+        /* 悬浮收束：微微上浮并压紧 */
+        .to(blob, { attr: { cy: pFeet - 30, rx: 26, ry: 40 }, duration: .45, ease: 'sine.inOut' }, T_MELT + .1)
+        /* 重力下落：加速触地 */
+        .to(blob, { attr: { cy: pGround - 12 }, duration: .45, ease: 'power3.in' }, T_MELT + .6)
+        /* 砸地压扁 */
+        .to(blob, { attr: { rx: 52, ry: 11, cy: pGround - 9 }, duration: .13, ease: 'power2.out' }, T_MELT + 1.05)
+        /* 向左右拉长成一道墨痕 */
+        .to(blob, { attr: { rx: 118, ry: 9 }, duration: .32, ease: 'power2.out' }, T_MELT + 1.18);
+
+      /* 触地飞溅的小墨点 */
+      var k;
+      for (k = 0; k < 12; k++) {
+        (function () {
+          var el = ink('rgba(206, 222, 240, .8)');
+          var dir = Math.random() < .5 ? -1 : 1;
+          var dx = dir * (30 + Math.random() * 90);
+          var r = 1.6 + Math.random() * 2;
+          gsap.set(el, { attr: { cx: poolX, cy: pGround - 8, rx: r, ry: r }, opacity: 0 });
+          tl.to(el, { opacity: .85, duration: .06 }, T_MELT + 1.05)
+            .to(el, {
+              attr: { cx: poolX + dx, cy: pGround - 8 - 16 - Math.random() * 22 },
+              duration: .22, ease: 'power2.out'
+            }, T_MELT + 1.05)
+            .to(el, {
+              attr: { cx: poolX + dx * 1.25, cy: pGround + 2 },
+              duration: .34, ease: 'power2.in'
+            }, T_MELT + 1.27)
+            .to(el, { opacity: 0, duration: .3 }, T_MELT + 1.4);
+        })();
+      }
+
+      /* ===== ③ 墨痕分裂 → 两条墨迹向上生长成猫狗 ===== */
+      var T_SPLIT = 4.98;
+
+      var stemCat = ink('rgba(214, 226, 242, .82)');
+      var stemDog = ink('rgba(214, 226, 242, .82)');
+      gsap.set(stemCat, { attr: { cx: catCx, cy: pGround - 4, rx: 7, ry: 3 }, opacity: 0 });
+      gsap.set(stemDog, { attr: { cx: dogCx, cy: pGround - 4, rx: 7, ry: 3 }, opacity: 0 });
+
+      /* 墨痕左右铺开成两簇，随后隐去、由墨柱接手 */
+      tl.to(blob, { opacity: 0, duration: .32 }, T_SPLIT + .04)
+        .to(stemCat, { opacity: .85, duration: .12 }, T_SPLIT)
+        .to(stemDog, { opacity: .85, duration: .12 }, T_SPLIT)
+
+        /* 从下往上拉伸：ellipse 的 ry/cy 一起长，视觉上就是"墨从地面往上洇" */
+        .to(stemCat, {
+          attr: { ry: ch * .52, rx: cw * .40, cy: pGround - ch * .52 },
+          duration: .5, ease: 'power2.out'
+        }, T_SPLIT)
+        .to(stemDog, {
+          attr: { ry: dh * .52, rx: dw * .40, cy: pGround - dh * .52 },
+          duration: .5, ease: 'power2.out'
+        }, T_SPLIT)
+
+        /* 猫狗本体以 scaleY 0.04 → 1 从地面"长"出来 */
+        .to([catEl, dogEl], { opacity: 1, duration: .1 }, T_SPLIT)
+        .to(catEl, { scaleY: 1, filter: 'blur(0px)', duration: .5, ease: 'power2.out' }, T_SPLIT)
+        .to(dogEl, { scaleY: 1, filter: 'blur(0px)', duration: .5, ease: 'power2.out' }, T_SPLIT + .08)
+
+        /* 墨迹退场，只留下猫狗 */
+        .to([stemCat, stemDog], { opacity: 0, duration: .35 }, T_SPLIT + .45)
+        .set([catEl, dogEl], { clearProps: 'filter,transform' }, T_SPLIT + .62);
+
+      /* ===== ④ 蓄力下蹲 → 猫先狗后两段跳 ===== */
+      var SQUAT = 6.05;
+      tl.to([catEl, dogEl], {
+        scaleY: .8, scaleX: 1.12, transformOrigin: '50% 100%',
+        duration: .22, yoyo: true, repeat: 1, ease: 'sine.inOut'
+      }, SQUAT);
+
+      function hop(el, x0, y0, xEnd, yEnd, arc, at, dur) {
+        var o = { p: 0 };
+        tl.to(o, {
+          p: 1, duration: dur, ease: 'none',
+          onUpdate: function () {
+            var p = o.p;
+            el.style.left = (x0 + (xEnd - x0) * p).toFixed(1) + 'px';
+            el.style.top = (y0 + (yEnd - y0) * p - arc * 4 * p * (1 - p)).toFixed(1) + 'px';
+          }
+        }, at);
+      }
+
+      var J1 = 6.55, J2 = 8.7;
+      hop(catEl, startX, groundY - ch, x1, b1 - ch, arc1, J1, .85);
+      hop(dogEl, startX + cw + gap, groundY - dh, x1 + cw + gap, b1 - dh, arc1, J1 + .5, .85);
+      hop(catEl, x1, b1 - ch, x2, b2 - ch, arc2, J2, .85);
+      hop(dogEl, x1 + cw + gap, b1 - dh, x2 + cw + gap, b2 - dh, arc2, J2 + .5, .85);
+
+      /* ===== ⑤ 爪印盖章 + 震屏 ===== */
+      var pawX = h2.left - ox + 10;
+      var pawB = (h2.top - oy) - 10;
+      var pawH = catPaw.offsetHeight || 107;
+      var pawW = catPaw.offsetWidth || 104;
+      gsap.set(catPaw, { left: pawX, top: pawB - pawH });
+      gsap.set(dogPaw, { left: pawX + pawW + 8, top: pawB - (dogPaw.offsetHeight || 92) });
+
+      var T_STAMP = 10.25;
+      tl.to([catEl, dogEl], { opacity: 0, scaleY: .6, duration: .18 }, T_STAMP - .16)
+        .set([catPaw, dogPaw], { scale: 3, y: -70, opacity: 0, transformOrigin: '50% 50%' }, T_STAMP)
+        .to([catPaw, dogPaw], {
+          scale: 1, y: 0, opacity: 1,
+          duration: .42, ease: 'back.out(1.8)', stagger: .06
+        }, T_STAMP)
+        .call(function () {
+          document.body.classList.add('is-quake');
+          setTimeout(function () { document.body.classList.remove('is-quake'); }, 220);
+        }, null, T_STAMP + .2);
+
+      if (window.IntersectionObserver) {
+        new IntersectionObserver(function (entries) {
+          tl.paused(entries[0].intersectionRatio < 0.25);
+        }, { threshold: [0, .25, 1] }).observe(stage);
+      }
+    })();
+  </script>
+
+</body>
+
+</html>
