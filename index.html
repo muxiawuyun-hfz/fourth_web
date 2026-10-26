@@ -12,7 +12,6 @@
     }
 
     html {
-      background: #0B132B;
       /* 锚点跳转时目标不被导航栏盖住 */
       scroll-padding-top: 84px;
       scroll-behavior: smooth;
@@ -25,9 +24,9 @@
       font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
       font-size: 17px;
       line-height: 1.7;
-      color: #d7e3f8;
-      /* 夜空渐变：深幽蓝 → 墨蓝 */
-      background: #0B132B linear-gradient(180deg, #0B132B 0%, #121A32 55%, #1C2541 100%) fixed;
+      color: #24364b;
+      /* 画布就绪前的兜底底色 */
+      background: #eaf7ff;
       min-height: 100vh;
       overflow-x: hidden;
     }
@@ -40,7 +39,7 @@
       height: 100%;
       display: block;
       z-index: 0;
-      opacity: .9;
+      opacity: .86;
       pointer-events: none;
     }
 
@@ -56,28 +55,6 @@
       pointer-events: none !important;
     }
 
-    /* 星星落到底部堆成的"发光金粉层"：默认高度 0，JS 在 10 秒后让它长高 */
-    .star-drift {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 0;
-      z-index: 0;
-      opacity: 0;
-      pointer-events: none !important;
-      transition: height 3.2s cubic-bezier(.22, .7, .2, 1), opacity 2.4s ease;
-      background:
-        radial-gradient(58% 130% at 12% 100%, rgba(255, 214, 120, .55) 0%, rgba(255, 214, 120, 0) 70%),
-        radial-gradient(52% 140% at 46% 100%, rgba(255, 255, 255, .34) 0%, rgba(255, 255, 255, 0) 72%),
-        radial-gradient(62% 130% at 84% 100%, rgba(255, 198, 88, .48) 0%, rgba(255, 198, 88, 0) 70%),
-        linear-gradient(to top, rgba(255, 226, 150, .5), rgba(255, 226, 150, 0));
-      /* 上沿用渐变遮罩化开，避免出现一条死板的横线 */
-      -webkit-mask-image: linear-gradient(to top, #000 26%, rgba(0, 0, 0, .55) 58%, transparent 100%);
-      mask-image: linear-gradient(to top, #000 26%, rgba(0, 0, 0, .55) 58%, transparent 100%);
-      filter: blur(5px);
-    }
-
     /* 细颗粒质感，让蓝色不"塑料"，更有纸张/胶片感 */
     body::after {
       content: "";
@@ -85,8 +62,8 @@
       inset: 0;
       z-index: 0;
       pointer-events: none;
-      opacity: .05;
-      mix-blend-mode: soft-light;
+      opacity: .035;
+      mix-blend-mode: multiply;
       background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='220' height='220' filter='url(%23n)'/></svg>");
     }
 
@@ -102,17 +79,16 @@
       align-items: center;
       justify-content: center;
       gap: 30px;
-      background: rgba(9, 15, 33, .72);
-      -webkit-backdrop-filter: blur(22px) saturate(150%);
-      backdrop-filter: blur(22px) saturate(150%);
-      border-bottom: 1px solid rgba(255, 255, 255, .12);
-      box-shadow: 0 10px 34px rgba(0, 0, 0, .45);
+      background: rgba(255, 255, 255, .66);
+      -webkit-backdrop-filter: blur(26px) saturate(170%);
+      backdrop-filter: blur(26px) saturate(170%);
+      border-bottom: 1px solid rgba(255, 255, 255, .85);
+      box-shadow: 0 8px 30px rgba(30, 100, 170, .12);
     }
 
     .nav a {
       position: relative;
-      color: #c3d3ec;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, .5);
+      color: #075d9c;
       text-decoration: none;
       padding: 4px 2px;
       border-bottom: 2px solid transparent;
@@ -120,8 +96,8 @@
     }
 
     .nav a:hover {
-      color: #ffffff;
-      border-bottom-color: #e6d3a3;
+      color: #043f6d;
+      border-bottom-color: #075d9c;
     }
 
     /* ===== 内容卡片（半透明玻璃，波纹从背后透出） ===== */
@@ -131,17 +107,14 @@
       max-width: 1000px;
       margin: 32px auto 56px;
       padding: 40px 40px 36px;
-      background: rgba(255, 255, 255, .07);
-      -webkit-backdrop-filter: blur(38px) saturate(145%);
-      backdrop-filter: blur(38px) saturate(145%);
-      border: 1px solid rgba(255, 255, 255, .15);
+      background: rgba(255, 255, 255, .84);
+      -webkit-backdrop-filter: blur(36px) saturate(160%);
+      backdrop-filter: blur(36px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, .92);
       border-radius: 20px;
       box-shadow:
-        0 30px 80px rgba(0, 0, 0, .6),
-        0 0 60px rgba(110, 150, 255, .08),
-        inset 0 1px 0 rgba(255, 255, 255, .22),
-        inset 0 0 20px rgba(255, 255, 255, .05),
-        inset 0 0 44px rgba(150, 180, 255, .05);
+        0 24px 64px rgba(40, 110, 180, .16),
+        inset 0 1px 0 rgba(255, 255, 255, .95);
       animation: cardIn .9s cubic-bezier(.2, .7, .2, 1) both;
     }
 
@@ -164,46 +137,28 @@
       font-weight: 700;
       letter-spacing: .08em;
       line-height: 1.15;
-      /* 金色流光：暗金 → 亮金 → 月白高光 → 亮金 → 暗金 */
-      background: linear-gradient(100deg,
-        #b8860b 0%, #ffd700 16%, #fffbe6 30%, #ffd700 44%,
-        #b8860b 58%, #ffe98a 76%, #ffd700 100%);
+      background: linear-gradient(100deg, #0b5aa0, #1195e0 30%, #4fc3f7 50%, #1195e0 70%, #0b5aa0);
       background-size: 220% 100%;
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 3px 12px rgba(0, 0, 0, .6)) drop-shadow(0 0 18px rgba(255, 215, 0, .22));
-      animation: sheen 6.5s linear infinite;
+      animation: sheen 9s ease-in-out infinite;
     }
 
     @keyframes sheen {
-      0% {
+      0%, 100% {
         background-position: 0% 50%;
       }
 
-      100% {
-        background-position: 200% 50%;
+      50% {
+        background-position: 100% 50%;
       }
     }
 
     h2 {
       margin: 0 0 14px;
       font-size: 22px;
-      color: #f3f7ff;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, .5);
-    }
-
-    h3 {
-      color: #f3f7ff;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, .5);
-    }
-
-    p,
-    li {
-      color: #E2E8F0;
-      font-weight: 500;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, .45);
+      color: #123c60;
     }
 
     h3 {
@@ -221,13 +176,12 @@
     }
 
     a {
-      color: #9fd0ff;
+      color: #0867a6;
       transition: color .3s;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, .45);
     }
 
     a:hover {
-      color: #ffffff;
+      color: #043f6d;
     }
 
     /* ===== 个人简介（上方留出"画卷走廊"，供剑客行过） ===== */
@@ -236,13 +190,10 @@
       margin-top: 26px;
       padding: 174px 30px 30px;
       background:
-        radial-gradient(120% 100% at 100% 0%, rgba(150, 185, 255, .12) 0%, rgba(150, 185, 255, 0) 62%),
-        linear-gradient(135deg, rgba(255, 255, 255, .07), rgba(140, 175, 255, .04));
-      border: 1px solid rgba(255, 255, 255, .15);
+        radial-gradient(120% 100% at 100% 0%, rgba(255, 255, 255, .55) 0%, rgba(255, 255, 255, 0) 60%),
+        linear-gradient(135deg, rgba(240, 250, 255, .92), rgba(224, 242, 255, .62));
+      border: 1px solid rgba(30, 130, 200, .14);
       border-radius: 16px;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, .16),
-        inset 0 0 20px rgba(255, 255, 255, .05);
       overflow: visible;
     }
 
@@ -250,9 +201,6 @@
     .avatar {
       /* 行走终点（圆形最右端），小屏时通过变量调整 */
       --travel-end: calc(100% - 160px);
-
-      /* 夜空主题：黑墨反相成白墨；再加一层青蓝仙气 */
-      filter: invert(1) drop-shadow(0 0 15px rgba(0, 255, 255, .55));
 
       position: absolute;
       top: 18px;
@@ -756,9 +704,6 @@
       width: 100%;
       height: auto;
       transform-origin: 50% 100%;
-      /* 发光水墨剪影：反相保留灰阶细节，青色外发光，滤色融入夜空 */
-      filter: invert(1) drop-shadow(0 0 12px #00E5FF) brightness(1.2);
-      mix-blend-mode: screen;
       /* 水平翻转：面向左边。翻转放在图片上，位移在父层，互不覆盖 */
       transform: scaleX(-1);
       animation: petBreathe 2s ease-in-out infinite;
@@ -828,10 +773,8 @@
       display: block;
       width: 100%;
       height: auto;
-      /* 深色主题：反相成白墨（色相回正保留粉肉垫），用滤色叠在夜空中发亮 */
-      filter: invert(1) hue-rotate(180deg) drop-shadow(0 0 12px rgba(255, 215, 0, .8));
-      mix-blend-mode: screen;
-      opacity: .85;
+      /* 正片叠底：墨色压进文字与纸面，白底不挡字 */
+      mix-blend-mode: multiply;
     }
 
     .stamp-cat {
@@ -901,71 +844,6 @@
       transition: opacity .22s ease, transform .22s ease;
     }
 
-    /* ===== GSAP 时间轴接管时的初始态（CDN 失败则旧 CSS 动画照常跑） ===== */
-    .profile.gs .avatar {
-      animation: none;
-      opacity: 0;
-    }
-
-    .profile.gs .avatar::before {
-      animation: none;
-    }
-
-    .profile.gs .glyph {
-      animation: none;
-    }
-
-    .profile.gs .morph {
-      animation: none;
-      opacity: 0;
-    }
-
-    .profile.gs .melt {
-      animation: none;
-    }
-
-    .profile.gs .puddle {
-      animation: none;
-      opacity: 0;
-    }
-
-    .profile.gs .pet {
-      transition: none;
-      /* 去掉父级滤镜，图片自身的 mix-blend-mode 才能真正与夜空相融 */
-      filter: none;
-    }
-
-    .profile.gs .stamp {
-      animation: none;
-    }
-
-    /* 爪印砸地：整页 0.2 秒震动 */
-    body.is-quake {
-      animation: bodyQuake .2s linear;
-    }
-
-    @keyframes bodyQuake {
-      0%, 100% {
-        transform: translate(0, 0);
-      }
-
-      20% {
-        transform: translate(-5px, 3px);
-      }
-
-      40% {
-        transform: translate(5px, -3px);
-      }
-
-      60% {
-        transform: translate(-3px, -2px);
-      }
-
-      80% {
-        transform: translate(3px, 2px);
-      }
-    }
-
     /* ===== 爱好列表 ===== */
     .hobbies {
       display: flex;
@@ -978,21 +856,16 @@
       display: flex;
       flex-direction: column;
       padding: 20px;
-      background: rgba(255, 255, 255, .06);
-      border: 1px solid rgba(255, 255, 255, .15);
+      background: rgba(252, 254, 255, .82);
+      border: 1px solid rgba(30, 130, 200, .18);
       border-radius: 14px;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, .14),
-        inset 0 0 20px rgba(255, 255, 255, .05);
       transition: transform .4s cubic-bezier(.2, .7, .2, 1), box-shadow .4s, border-color .4s;
     }
 
     .hobby:hover {
       transform: translateY(-5px);
-      border-color: rgba(230, 211, 163, .5);
-      box-shadow:
-        0 18px 38px rgba(0, 0, 0, .5),
-        0 0 30px rgba(230, 211, 163, .12);
+      border-color: rgba(30, 130, 210, .45);
+      box-shadow: 0 18px 38px rgba(10, 70, 130, .16);
     }
 
     .hobby a {
@@ -1003,8 +876,7 @@
 
     /* ===== 3D 画廊（Swiper Cover Flow） ===== */
     .gallery-swiper {
-      --swiper-theme-color: #e6d3a3;
-      --swiper-navigation-color: #e7efff;
+      --swiper-theme-color: #0b4a76;
       --swiper-navigation-size: 15px;
 
       width: 100%;
@@ -1018,13 +890,13 @@
       border-radius: 12px;
       overflow: hidden;
       opacity: .5;
-      box-shadow: 0 14px 34px rgba(0, 0, 0, .55);
+      box-shadow: 0 10px 26px rgba(8, 40, 80, .16);
       transition: opacity .45s ease, box-shadow .45s ease;
     }
 
     .gallery-swiper .swiper-slide-active {
       opacity: 1;
-      box-shadow: 0 24px 54px rgba(0, 0, 0, .7), 0 0 34px rgba(230, 211, 163, .12);
+      box-shadow: 0 22px 48px rgba(8, 50, 100, .3);
     }
 
     .gallery-swiper .swiper-slide img {
@@ -1088,11 +960,9 @@
       width: 34px;
       height: 34px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, .1);
-      color: #e7efff;
-      border: 1px solid rgba(255, 255, 255, .22);
-      backdrop-filter: blur(8px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, .45);
+      background: rgba(255, 255, 255, .82);
+      color: #0b4a76;
+      box-shadow: 0 6px 16px rgba(8, 50, 100, .18);
     }
 
     .gallery-swiper .swiper-button-prev::after,
@@ -1113,13 +983,12 @@
     .gallery-swiper .swiper-pagination-bullet {
       width: 7px;
       height: 7px;
-      background: #cfe0ff;
-      opacity: .3;
+      background: #0b4a76;
+      opacity: .28;
     }
 
     .gallery-swiper .swiper-pagination-bullet-active {
-      opacity: .95;
-      background: #e6d3a3;
+      opacity: .9;
     }
 
     /* 兜底：CDN 没加载成功时，退化成可横向滑动的普通画廊 */
@@ -1154,33 +1023,14 @@
     .contact {
       margin-top: 34px;
       padding-top: 24px;
-      border-top: 1px solid rgba(255, 255, 255, .12);
-    }
-
-    /* 联系区链接：浅金、无下划线、悬浮发光 */
-    .contact p {
-      line-height: 1.8;
-    }
-
-    .contact a {
-      display: inline-block;
-      color: #FFD700;
-      text-decoration: none;
-      transition: all .3s ease;
-    }
-
-    .contact a:hover {
-      color: #ffe98a;
-      text-shadow: 0 0 8px rgba(255, 215, 0, .8);
-      transform: scale(1.04);
+      border-top: 1px solid rgba(9, 90, 150, .13);
     }
 
     footer {
       margin-top: 28px;
       text-align: center;
-      color: rgba(190, 205, 235, .66);
+      color: #7b8ea3;
       font-size: 15px;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, .45);
     }
 
     /* ===== 小屏适配 ===== */
@@ -1267,7 +1117,6 @@
 
   <canvas id="bg-waves" aria-hidden="true"></canvas>
   <canvas id="bg-stars" aria-hidden="true"></canvas>
-  <div class="star-drift" aria-hidden="true"></div>
 
   <nav class="nav">
     <a href="#home">首页</a>
@@ -1497,20 +1346,20 @@
 
         /* 通透的浅蓝底：接近白的水色，留出呼吸感 */
         baseFill = ctx.createLinearGradient(0, 0, W * 0.4, H);
-        baseFill.addColorStop(0, '#0B132B');
-        baseFill.addColorStop(0.35, '#101a33');
-        baseFill.addColorStop(0.68, '#16203c');
-        baseFill.addColorStop(1, '#1C2541');
+        baseFill.addColorStop(0, '#f6fdff');
+        baseFill.addColorStop(0.35, '#ddf1ff');
+        baseFill.addColorStop(0.68, '#c3e4fd');
+        baseFill.addColorStop(1, '#eefaff');
 
         /* 每层波各用一档蓝色，层层叠出鲜活的层次 */
-        var palette = ['120,165,235', '140,185,255', '100,145,220', '150,195,255', '115,160,235', '160,200,255', '130,180,245'];
+        var palette = ['6,96,182', '0,118,196', '8,78,152', '10,136,202', '0,100,170', '14,112,192', '0,146,192'];
         layerGrads = layers.map(function (L, i) {
           var c = palette[i % palette.length];
           var g = ctx.createLinearGradient(0, 0, W, 0);
           g.addColorStop(0, 'rgba(' + c + ',0)');
-          g.addColorStop(0.16, 'rgba(' + c + ',.05)');
-          g.addColorStop(0.5, 'rgba(' + c + ',.13)');
-          g.addColorStop(0.84, 'rgba(' + c + ',.05)');
+          g.addColorStop(0.16, 'rgba(' + c + ',.46)');
+          g.addColorStop(0.5, 'rgba(' + c + ',.86)');
+          g.addColorStop(0.84, 'rgba(' + c + ',.46)');
           g.addColorStop(1, 'rgba(' + c + ',0)');
           return g;
         });
@@ -1532,13 +1381,13 @@
 
           ctx.beginPath();
           ctx.arc(0, 0, rad, 0, Math.PI * 2);
-          ctx.strokeStyle = 'rgba(150,190,255,' + (a * 0.55).toFixed(3) + ')';
+          ctx.strokeStyle = 'rgba(14,102,180,' + a.toFixed(3) + ')';
           ctx.lineWidth = 1.4;
           ctx.stroke();
 
           ctx.beginPath();
           ctx.arc(0, 0, rad * 0.72, 0, Math.PI * 2);
-          ctx.strokeStyle = 'rgba(180,210,255,' + (a * 0.35).toFixed(3) + ')';
+          ctx.strokeStyle = 'rgba(10,140,205,' + (a * 0.6).toFixed(3) + ')';
           ctx.lineWidth = 0.8;
           ctx.stroke();
 
@@ -1582,14 +1431,14 @@
 
       /* 三团缓慢游动的彩色水汽：multiply 叠在水色上，像水彩晕开 */
       var spots = [
-        { x: 0.20, y: 0.22, r: 0.62, c: '90,130,220', a: 0.10, ax: 0.14, ay: 0.10, ph: 0 },
-        { x: 0.80, y: 0.36, r: 0.55, c: '120,110,220', a: 0.08, ax: 0.10, ay: 0.13, ph: 2.1 },
-        { x: 0.48, y: 0.80, r: 0.62, c: '60,140,210', a: 0.09, ax: 0.12, ay: 0.08, ph: 4.2 }
+        { x: 0.20, y: 0.22, r: 0.62, c: '24,130,214', a: 0.24, ax: 0.14, ay: 0.10, ph: 0 },
+        { x: 0.80, y: 0.36, r: 0.55, c: '58,108,226', a: 0.20, ax: 0.10, ay: 0.13, ph: 2.1 },
+        { x: 0.48, y: 0.80, r: 0.62, c: '0,166,206', a: 0.22, ax: 0.12, ay: 0.08, ph: 4.2 }
       ];
 
       function drawSpots() {
         var count = W < 720 ? 2 : spots.length;
-        ctx.globalCompositeOperation = 'screen';
+        ctx.globalCompositeOperation = 'multiply';
 
         for (var i = 0; i < count; i++) {
           var sp = spots[i];
@@ -1686,13 +1535,9 @@
     })();
   </script>
 
-  <!-- GSAP：顶部电影级时间轴 -->
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-
   <script>
-    /* 旧版动画：仅当 GSAP 未加载时作为兜底 */
+    /* 墨滴重力 → 落地成滩 → 墨滩化出猫狗 → 待机呼吸 → 猫先狗后向左上跳出 */
     (function () {
-      if (window.gsap) return;
       var stage = document.querySelector('.profile');
       var field = document.querySelector('.ink-field');
       var groundEl = document.querySelector('.who-cares');
@@ -1756,7 +1601,7 @@
           if (parts.length > 110) return;
           var r = 1.8 + Math.random() * 2.4;
           var el = document.createElementNS(NS, 'ellipse');
-          el.setAttribute('fill', 'rgba(226, 232, 246, ' + (0.6 + Math.random() * 0.3).toFixed(2) + ')');
+          el.setAttribute('fill', 'rgba(20, 23, 30, ' + (0.72 + Math.random() * 0.24).toFixed(2) + ')');
           field.appendChild(el);
           parts.push({
             el: el,
@@ -1776,7 +1621,7 @@
         if (pool) return;
         poolRx = 2;
         pool = document.createElementNS(NS, 'ellipse');
-        pool.setAttribute('fill', 'rgba(222, 230, 248, 0.42)');
+        pool.setAttribute('fill', 'rgba(20, 23, 30, 0.5)');
         pool.setAttribute('cx', m.originX);
         pool.setAttribute('cy', m.ground - 2.6);
         pool.setAttribute('rx', 2);
@@ -2345,19 +2190,12 @@
         var vy = 6 + Math.pow(depth, 1.35) * 84;       /* 6 ~ 90 px/s */
         if (ci === 2) vy *= 1.25;                      /* 星光蓝跑得稍快 */
 
-        /* 每颗星有各自的落点（屏幕底部上方 70~104px），堆出参差的"厚度" */
-        var gy = H - 70 - Math.random() * 34;
-
         return {
           s: si,
           c: ci,
           size: (range[0] + (range[1] - range[0]) * depth) * SIZE_SCALE,
           x: Math.random() * W,
-          y: anywhere ? rand(-H * 0.25, Math.max(0, gy - 40)) : rand(-90, -12),
-          gy: gy,
-          resting: false,
-          restT: 0,
-          hold: 1.3 + Math.random() * 2.0,   /* 停驻时长，之后开始淡出 */
+          y: anywhere ? rand(-H * 0.25, H) : rand(-90, -12),
           vy: vy,
           amp: rand(6, 48),
           freq: rand(0.2, 0.8),
@@ -2416,33 +2254,15 @@
         for (var i = 0; i < parts.length; i++) {
           var p = parts[i];
 
-          if (!p.resting) {
-            p.y += p.vy * dt;
-            p.rot += p.vrot * dt;
+          p.y += p.vy * dt;
+          p.rot += p.vrot * dt;
 
-            /* 触到自己的落点：停住，不再重置回顶部 */
-            if (p.y >= p.gy) {
-              p.y = p.gy;
-              p.resting = true;
-              p.restT = 0;
-            }
-          } else {
-            p.restT += dt;
-            /* 停够时间并淡完后，才回到顶部重新飘落 */
-            if (p.restT > p.hold + 0.9) {
-              parts[i] = makeParticle(false);
-              continue;
-            }
+          if (p.y - p.size > H + 60) {
+            parts[i] = makeParticle(false);
+            continue;
           }
 
-          var a;
-          if (p.resting) {
-            /* 原地快速闪烁 → 逐渐淡出 */
-            var fadeK = p.restT <= p.hold ? 1 : Math.max(0, 1 - (p.restT - p.hold) / 0.9);
-            a = p.alpha * (0.7 + 0.3 * Math.sin(t * 4.2 + p.twPhase)) * fadeK;
-          } else {
-            a = p.alpha * (0.88 + 0.12 * Math.sin(t * p.tw + p.twPhase));
-          }
+          var a = p.alpha * (0.88 + 0.12 * Math.sin(t * p.tw + p.twPhase));
           if (a <= 0.02) continue;
 
           var px = p.x + Math.sin(t * p.freq + p.phase) * p.amp;
@@ -2451,11 +2271,6 @@
           var stretch = p.vy > 58 ? 1 + (p.vy - 58) / 58 * 1.5 : 1;
           var kx = s / Math.sqrt(stretch);
           var ky = s * stretch;
-
-          if (p.resting) {
-            kx *= 1.08;
-            ky *= 0.8;
-          }
 
           var co = Math.cos(p.rot);
           var si = Math.sin(p.rot);
@@ -2478,15 +2293,6 @@
       resize();
       requestAnimationFrame(frame);
 
-      /* 运行 10 秒后，底部"金粉堆"从 0 长到 86px */
-      var drift = document.querySelector('.star-drift');
-      if (drift) {
-        setTimeout(function () {
-          drift.style.opacity = '.6';
-          drift.style.height = '86px';
-        }, 10000);
-      }
-
       var rt;
       window.addEventListener('resize', function () {
         clearTimeout(rt);
@@ -2502,237 +2308,6 @@
           requestAnimationFrame(frame);
         }
       });
-    })();
-  </script>
-
-  <!-- 顶部动画总导演：GSAP 时间轴（5 个阶段严格串行，互不冲突） -->
-  <script>
-    (function () {
-      if (!window.gsap) return;                 /* 没有 GSAP 时交给旧版 CSS/JS 动画 */
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-      var stage = document.querySelector('.profile');
-      if (!stage) return;
-
-      var avatar = stage.querySelector('.avatar');
-      var glyph = stage.querySelector('.glyph');
-      var morph = stage.querySelector('.morph');
-      var melt = stage.querySelector('.melt');
-      var field = document.querySelector('.ink-field');
-      var petsEl = document.querySelector('.pets');
-      var catEl = document.querySelector('.pet-cat');
-      var dogEl = document.querySelector('.pet-dog');
-      var catPaw = document.querySelector('.stamp-cat');
-      var dogPaw = document.querySelector('.stamp-dog');
-      var groundEl = document.querySelector('.who-cares');
-      var dataEl = document.querySelector('.big-data');
-      var titleEl = document.getElementById('target-title');
-      if (!avatar || !field || !petsEl || !catEl || !dogEl || !groundEl) return;
-
-      stage.classList.add('gs');
-
-      /* ---------- 量尺寸 ---------- */
-      var pr = stage.getBoundingClientRect();
-      var pb = petsEl.getBoundingClientRect();
-      var ox = pb.left, oy = pb.top;
-      var gr = groundEl.getBoundingClientRect();
-      var l1 = dataEl.getBoundingClientRect();
-      var h2 = titleEl.getBoundingClientRect();
-
-      var cw = catEl.offsetWidth || 104;
-      var ch = catEl.offsetHeight || 106;
-      var dw = dogEl.offsetWidth || 132;
-      var dh = dogEl.offsetHeight || 136;
-      var gap = 8;
-      var total = cw + gap + dw;
-      var maxH = Math.max(ch, dh);
-
-      var endLeft = pr.width - 160;               /* 与 CSS --travel-end 对齐 */
-      var poolX = endLeft + 70;                   /* 侠客圆盘中心 */
-
-      var limitL = 8 - (pb.left - pr.left);
-      var limitR = pr.width - total - 8 - (pb.left - pr.left);
-      function clampX(v) {
-        return Math.min(Math.max(limitL, v), Math.max(limitL, limitR));
-      }
-
-      var startX = clampX(poolX - ox - total / 2);
-      var x1 = clampX(l1.left + l1.width / 2 - ox - total / 2);
-      var x2 = clampX(h2.left - ox + 20);
-      var b1 = (l1.top - oy) - 18;
-      var b2 = (h2.top - oy) - 18;
-      var groundY = (gr.bottom - oy) - 2;
-
-      function arcFor(fromB, toB, want) {
-        var peak = (fromB + toB) / 2 - want;
-        var floorB = (8 - oy) + maxH;
-        if (peak < floorB) want = (fromB + toB) / 2 - floorB;
-        return Math.max(14, want);
-      }
-      var arc1 = arcFor(groundY, b1, 58);
-      var arc2 = arcFor(b1, b2, 42);
-
-      var pGround = gr.bottom - pr.top - 2;                 /* .profile 坐标 */
-      var pFeet = (avatar.getBoundingClientRect().top - pr.top) + 118;
-      var offX = pb.left - pr.left;
-      var catCx = offX + startX + cw / 2;
-      var dogCx = offX + startX + cw + gap + dw / 2;
-
-      /* ---------- 初始态 ---------- */
-      gsap.set(avatar, { left: 20, opacity: 0 });
-      gsap.set(glyph, { opacity: 1, scale: 1, transformOrigin: '50% 50%' });
-      gsap.set(morph, { opacity: 0, filter: 'blur(10px)' });
-      gsap.set(catEl, {
-        left: startX, top: groundY - ch, opacity: 0,
-        scaleY: .04, transformOrigin: '50% 100%', filter: 'blur(6px)'
-      });
-      gsap.set(dogEl, {
-        left: startX + cw + gap, top: groundY - dh, opacity: 0,
-        scaleY: .04, transformOrigin: '50% 100%', filter: 'blur(6px)'
-      });
-      gsap.set([catPaw, dogPaw], { opacity: 0 });
-
-      var NS = 'http://www.w3.org/2000/svg';
-      function ink(fill) {
-        var el = document.createElementNS(NS, 'ellipse');
-        el.setAttribute('fill', fill);
-        field.appendChild(el);
-        return el;
-      }
-
-      var tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
-
-      /* ===== ① 神球 → 斗笠侠客 ===== */
-      tl.to(glyph, { opacity: 0, scale: 1.45, filter: 'blur(10px)', duration: .85 }, 0)
-        .to(avatar, { opacity: 1, duration: .35 }, 0)
-        .to(morph, { opacity: 1, filter: 'blur(0px)', duration: .8 }, .3)
-        .to(avatar, { left: endLeft, duration: 1.4, ease: 'sine.inOut' }, 1.15);
-
-      /* ===== ② 站定 1 秒 → 塌成一团悬浮墨团 ===== */
-      var T_MELT = 3.5;
-      tl.to(melt, {
-        scaleY: .12, scaleX: 1.06, y: 26, opacity: 0, filter: 'blur(7px)',
-        duration: .7, ease: 'power2.in'
-      }, T_MELT)
-        .to(avatar, { opacity: 0, duration: .45 }, T_MELT + .45);
-
-      var blob = ink('rgba(216, 228, 244, .92)');
-      gsap.set(blob, { attr: { cx: poolX, cy: pFeet - 14, rx: 30, ry: 34 }, opacity: 0 });
-
-      tl.to(blob, { opacity: .92, duration: .2 }, T_MELT + .1)
-        /* 悬浮收束：微微上浮并压紧 */
-        .to(blob, { attr: { cy: pFeet - 30, rx: 26, ry: 40 }, duration: .45, ease: 'sine.inOut' }, T_MELT + .1)
-        /* 重力下落：加速触地 */
-        .to(blob, { attr: { cy: pGround - 12 }, duration: .45, ease: 'power3.in' }, T_MELT + .6)
-        /* 砸地压扁 */
-        .to(blob, { attr: { rx: 52, ry: 11, cy: pGround - 9 }, duration: .13, ease: 'power2.out' }, T_MELT + 1.05)
-        /* 向左右拉长成一道墨痕 */
-        .to(blob, { attr: { rx: 118, ry: 9 }, duration: .32, ease: 'power2.out' }, T_MELT + 1.18);
-
-      /* 触地飞溅的小墨点 */
-      var k;
-      for (k = 0; k < 12; k++) {
-        (function () {
-          var el = ink('rgba(206, 222, 240, .8)');
-          var dir = Math.random() < .5 ? -1 : 1;
-          var dx = dir * (30 + Math.random() * 90);
-          var r = 1.6 + Math.random() * 2;
-          gsap.set(el, { attr: { cx: poolX, cy: pGround - 8, rx: r, ry: r }, opacity: 0 });
-          tl.to(el, { opacity: .85, duration: .06 }, T_MELT + 1.05)
-            .to(el, {
-              attr: { cx: poolX + dx, cy: pGround - 8 - 16 - Math.random() * 22 },
-              duration: .22, ease: 'power2.out'
-            }, T_MELT + 1.05)
-            .to(el, {
-              attr: { cx: poolX + dx * 1.25, cy: pGround + 2 },
-              duration: .34, ease: 'power2.in'
-            }, T_MELT + 1.27)
-            .to(el, { opacity: 0, duration: .3 }, T_MELT + 1.4);
-        })();
-      }
-
-      /* ===== ③ 墨痕分裂 → 两条墨迹向上生长成猫狗 ===== */
-      var T_SPLIT = 4.98;
-
-      var stemCat = ink('rgba(214, 226, 242, .82)');
-      var stemDog = ink('rgba(214, 226, 242, .82)');
-      gsap.set(stemCat, { attr: { cx: catCx, cy: pGround - 4, rx: 7, ry: 3 }, opacity: 0 });
-      gsap.set(stemDog, { attr: { cx: dogCx, cy: pGround - 4, rx: 7, ry: 3 }, opacity: 0 });
-
-      /* 墨痕左右铺开成两簇，随后隐去、由墨柱接手 */
-      tl.to(blob, { opacity: 0, duration: .32 }, T_SPLIT + .04)
-        .to(stemCat, { opacity: .85, duration: .12 }, T_SPLIT)
-        .to(stemDog, { opacity: .85, duration: .12 }, T_SPLIT)
-
-        /* 从下往上拉伸：ellipse 的 ry/cy 一起长，视觉上就是"墨从地面往上洇" */
-        .to(stemCat, {
-          attr: { ry: ch * .52, rx: cw * .40, cy: pGround - ch * .52 },
-          duration: .5, ease: 'power2.out'
-        }, T_SPLIT)
-        .to(stemDog, {
-          attr: { ry: dh * .52, rx: dw * .40, cy: pGround - dh * .52 },
-          duration: .5, ease: 'power2.out'
-        }, T_SPLIT)
-
-        /* 猫狗本体以 scaleY 0.04 → 1 从地面"长"出来 */
-        .to([catEl, dogEl], { opacity: 1, duration: .1 }, T_SPLIT)
-        .to(catEl, { scaleY: 1, filter: 'blur(0px)', duration: .5, ease: 'power2.out' }, T_SPLIT)
-        .to(dogEl, { scaleY: 1, filter: 'blur(0px)', duration: .5, ease: 'power2.out' }, T_SPLIT + .08)
-
-        /* 墨迹退场，只留下猫狗 */
-        .to([stemCat, stemDog], { opacity: 0, duration: .35 }, T_SPLIT + .45)
-        .set([catEl, dogEl], { clearProps: 'filter,transform' }, T_SPLIT + .62);
-
-      /* ===== ④ 蓄力下蹲 → 猫先狗后两段跳 ===== */
-      var SQUAT = 6.05;
-      tl.to([catEl, dogEl], {
-        scaleY: .8, scaleX: 1.12, transformOrigin: '50% 100%',
-        duration: .22, yoyo: true, repeat: 1, ease: 'sine.inOut'
-      }, SQUAT);
-
-      function hop(el, x0, y0, xEnd, yEnd, arc, at, dur) {
-        var o = { p: 0 };
-        tl.to(o, {
-          p: 1, duration: dur, ease: 'none',
-          onUpdate: function () {
-            var p = o.p;
-            el.style.left = (x0 + (xEnd - x0) * p).toFixed(1) + 'px';
-            el.style.top = (y0 + (yEnd - y0) * p - arc * 4 * p * (1 - p)).toFixed(1) + 'px';
-          }
-        }, at);
-      }
-
-      var J1 = 6.55, J2 = 8.7;
-      hop(catEl, startX, groundY - ch, x1, b1 - ch, arc1, J1, .85);
-      hop(dogEl, startX + cw + gap, groundY - dh, x1 + cw + gap, b1 - dh, arc1, J1 + .5, .85);
-      hop(catEl, x1, b1 - ch, x2, b2 - ch, arc2, J2, .85);
-      hop(dogEl, x1 + cw + gap, b1 - dh, x2 + cw + gap, b2 - dh, arc2, J2 + .5, .85);
-
-      /* ===== ⑤ 爪印盖章 + 震屏 ===== */
-      var pawX = h2.left - ox + 10;
-      var pawB = (h2.top - oy) - 10;
-      var pawH = catPaw.offsetHeight || 107;
-      var pawW = catPaw.offsetWidth || 104;
-      gsap.set(catPaw, { left: pawX, top: pawB - pawH });
-      gsap.set(dogPaw, { left: pawX + pawW + 8, top: pawB - (dogPaw.offsetHeight || 92) });
-
-      var T_STAMP = 10.25;
-      tl.to([catEl, dogEl], { opacity: 0, scaleY: .6, duration: .18 }, T_STAMP - .16)
-        .set([catPaw, dogPaw], { scale: 3, y: -70, opacity: 0, transformOrigin: '50% 50%' }, T_STAMP)
-        .to([catPaw, dogPaw], {
-          scale: 1, y: 0, opacity: 1,
-          duration: .42, ease: 'back.out(1.8)', stagger: .06
-        }, T_STAMP)
-        .call(function () {
-          document.body.classList.add('is-quake');
-          setTimeout(function () { document.body.classList.remove('is-quake'); }, 220);
-        }, null, T_STAMP + .2);
-
-      if (window.IntersectionObserver) {
-        new IntersectionObserver(function (entries) {
-          tl.paused(entries[0].intersectionRatio < 0.25);
-        }, { threshold: [0, .25, 1] }).observe(stage);
-      }
     })();
   </script>
 
